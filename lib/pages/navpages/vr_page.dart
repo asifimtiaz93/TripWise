@@ -6,7 +6,11 @@ class vrPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Text('hi'),
+      body: Container(
+        child: Center(
+          child: Text("VR page"),
+        ),
+      ),
     );
   }
 }
