@@ -8,7 +8,7 @@ class vrPage extends StatelessWidget {
     return Scaffold(
       body: Container(
         child: Center(
-          child: Text("VRsd page"),
+          child: Text("VhhRsd page"),
         ),
       ),
     );
