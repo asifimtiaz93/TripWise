@@ -22,6 +22,6 @@ class MyApp extends StatelessWidget {
             textTheme: GoogleFonts.mulishTextTheme(
               Theme.of(context).textTheme,
             )),
-        home: const MainPage());
+        home: const WelcomePage());
   }
 }

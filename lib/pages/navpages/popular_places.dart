@@ -65,11 +65,11 @@ class PopularPlacesPage extends StatelessWidget {
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) => DestinationDetailsPage(place: place),
+            builder: (context) => DestinationDetailsPage(title: 'i', location: 'i', rating: 5.9, imageUrl: 'i', description: 'i',),
           ),
         );
       }
-          : null,
+         :null,
       child: Card(
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(16),
