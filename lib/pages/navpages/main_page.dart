@@ -1,9 +1,14 @@
+
 import 'package:flutter/material.dart';
 import 'package:tripwise/pages/navpages/home_page.dart';
 import 'package:tripwise/pages/navpages/plan_page.dart';
 import 'package:tripwise/pages/navpages/profile_page.dart';
 import 'package:tripwise/pages/navpages/search_page.dart';
 import 'package:tripwise/pages/navpages/vr_page.dart';
+
+import 'package:tripwise/pages/navpages/popular_places.dart';
+import 'package:tripwise/pages/navpages/booking_page.dart';
+
 
 class MainPage extends StatefulWidget {
   const MainPage({super.key});
@@ -19,12 +24,16 @@ class _MainPageState extends State<MainPage> {
     searchPage(),
     planPage(),
     profilePage(),
+    PopularPlacesPage(),
+    BookingPage(),
   ];
-int currentIndex=0;
-  void onTap(int index){
-  setState(() {
-    currentIndex=index;
-  });
+  int currentIndex = 0;
+
+  void onTap(int index) {
+    setState(() {
+      currentIndex = index;
+    });
+
   }
 
   @override
@@ -52,7 +61,8 @@ int currentIndex=0;
           BottomNavigationBarItem(
               label: 'Profile', icon: Icon(Icons.person_outline_outlined)),
 
-        ],
+       ],
+
       ),
     );
   }

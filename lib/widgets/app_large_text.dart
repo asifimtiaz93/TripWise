@@ -8,7 +8,9 @@ class AppLargeText extends StatelessWidget {
   final Color color;
   AppLargeText({
     Key? key,
-    this.size = 20,
+
+    this.size = 30,
+
     required this.text,
     this.color = Colors.black,
   }) : super(key: key);

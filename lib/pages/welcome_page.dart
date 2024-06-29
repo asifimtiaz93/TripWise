@@ -1,9 +1,13 @@
 import 'package:flutter/material.dart';
+
 import 'package:tripwise/widgets/app_large_text.dart';
 import 'package:tripwise/widgets/app_text.dart';
 import 'package:tripwise/widgets/responsive_button.dart';
 
 import '../misc/colors.dart';
+
+import 'navpages/main_page.dart';
+
 
 class WelcomePage extends StatefulWidget {
   const WelcomePage({super.key});
@@ -18,6 +22,16 @@ class _WelcomePageState extends State<WelcomePage> {
     "2.jpg",
     "3.jpg",
   ];
+
+
+  void _navigatetoPop() {
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => const MainPage()),
+    );
+  }
+
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -42,22 +56,37 @@ class _WelcomePageState extends State<WelcomePage> {
                             .start, //!this aligns the text from the beginning
                         children: [
                           AppLargeText(
+
                             text: "Trips",
                           ),
                           AppText(
-                            text: "Mountain",
+
+
+                            text: "People don't take Trips, ",
+                            color: Colors.white,
+                          ),
+                          AppText(
+                            text: "Trips take People",
+                            color: Colors.white,
+
                             size: 30,
                           ),
                           Container(
                             width: 250,
                             child: AppText(
                                 text:
-                                    "Mountain hike are beautiful thing. we must do it every once in a blue moon.",
-                                 color: AppColors.textColor1,
+
+                                    "To get the best of your adventure you just need to leave and go where you like. we are waiting for you",
+                                 color: Colors.white,
                                 ),
                           ),
                           SizedBox(height: 40,),
-                          ResponsiveButton(width: 120,text: 'Next',),
+                          GestureDetector(
+                            onTap: _navigatetoPop,
+                            child: ResponsiveButton(width: 120,text: 'Next',),
+
+                          ),
+
                         ],
                       )
                     ],
