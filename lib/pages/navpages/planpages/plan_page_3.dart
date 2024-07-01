@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:tripwise/pages/navpages/planpages/plan_page_final.dart';
 
 class PlanPage3 extends StatefulWidget {
   const PlanPage3({super.key});
@@ -81,7 +82,7 @@ class _PlanPage3State extends State<PlanPage3> {
             Center(
               child: ElevatedButton(
                 onPressed: () {
-                  // Navigate to next page
+                  Navigator.push(context, MaterialPageRoute(builder: (context)=>const PlanReadyPage()),);
                 },
                 child: const Text('Next'),
                 style: ElevatedButton.styleFrom(
