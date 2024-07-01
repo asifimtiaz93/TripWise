@@ -44,7 +44,7 @@ class _MainPageState extends State<MainPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('App Title'), // You can update the title as needed
+        title: Text('TripWise'), // You can update the title as needed
       ),
       drawer: Drawer(
         child: ListView(
