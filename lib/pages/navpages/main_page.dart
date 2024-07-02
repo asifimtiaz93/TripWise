@@ -15,7 +15,7 @@ class MainPage extends StatefulWidget {
 }
 
 class _MainPageState extends State<MainPage> {
-  List pages = [
+  List<Widget> pages = [
     homePage(),
     vrPage(),
     searchPage(),
@@ -24,20 +24,27 @@ class _MainPageState extends State<MainPage> {
     PopularPlacesPage(),
     BookingPage(),
   ];
-  int bottomNavIndex = 0;
-  int drawerIndex = 0;
 
-  void onBottomNavTap(int index) {
+  // Map BottomNavigationBar indices to page indices
+  final Map<int, int> bottomNavBarPageMapping = {
+    0: 0, // Home
+    1: 1, // VR
+    2: 2, // Search
+    3: 3, // Plan
+    4: 4, // Profile
+  };
+
+  int selectedIndex = 0;
+
+  void onBottomNavTapped(int index) {
     setState(() {
-      bottomNavIndex = index;
-      drawerIndex = index; // Sync the drawerIndex with bottomNavIndex
+      selectedIndex = bottomNavBarPageMapping[index]!;
     });
   }
 
-  void onDrawerTap(int index) {
+  void onDrawerTapped(int index) {
     setState(() {
-      drawerIndex = index;
-      bottomNavIndex = index; // Sync the bottomNavIndex with drawerIndex
+      selectedIndex = index;
       Navigator.pop(context); // Close the drawer
     });
   }
@@ -46,7 +53,7 @@ class _MainPageState extends State<MainPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('TripWise'), // You can update the title as needed
+        title: Text('TripWise'),
       ),
       drawer: Drawer(
         child: ListView(
@@ -67,51 +74,53 @@ class _MainPageState extends State<MainPage> {
             ListTile(
               leading: Icon(Icons.house_siding_outlined),
               title: Text('Home'),
-              onTap: () => onDrawerTap(0),
+              onTap: () => onDrawerTapped(0),
             ),
             ListTile(
               leading: Icon(Icons.threesixty),
               title: Text('VR'),
-              onTap: () => onDrawerTap(1),
+              onTap: () => onDrawerTapped(1),
             ),
             ListTile(
               leading: Icon(Icons.search),
               title: Text('Search'),
-              onTap: () => onDrawerTap(2),
+              onTap: () => onDrawerTapped(2),
             ),
             ListTile(
               leading: Icon(Icons.assistant_outlined),
               title: Text('Plan'),
-              onTap: () => onDrawerTap(3),
+              onTap: () => onDrawerTapped(3),
             ),
             ListTile(
               leading: Icon(Icons.person_outline_outlined),
               title: Text('Profile'),
-              onTap: () => onDrawerTap(4),
+              onTap: () => onDrawerTapped(4),
             ),
             ListTile(
               leading: Icon(Icons.place),
               title: Text('Popular Places'),
-              onTap: () => onDrawerTap(5),
+              onTap: () => onDrawerTapped(5),
             ),
             ListTile(
               leading: Icon(Icons.book_online),
               title: Text('Booking'),
-              onTap: () => onDrawerTap(6),
+              onTap: () => onDrawerTapped(6),
             ),
           ],
         ),
       ),
-      body: pages[bottomNavIndex],
+      body: pages[selectedIndex],
       bottomNavigationBar: BottomNavigationBar(
         type: BottomNavigationBarType.fixed,
-        onTap: onBottomNavTap,
-        currentIndex: bottomNavIndex,
+        currentIndex: bottomNavBarPageMapping.entries
+            .firstWhere((entry) => entry.value == selectedIndex, orElse: () => const MapEntry(0, 0))
+            .key,
         selectedItemColor: Colors.black54,
         unselectedItemColor: Colors.black38,
         elevation: 2,
         showSelectedLabels: true,
         showUnselectedLabels: true,
+        onTap: onBottomNavTapped,
         items: [
           BottomNavigationBarItem(
               label: 'Home', icon: Icon(Icons.house_siding_outlined)),
