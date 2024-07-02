@@ -115,10 +115,8 @@ class _MainPageState extends State<MainPage> {
         items: [
           BottomNavigationBarItem(
               label: 'Home', icon: Icon(Icons.house_siding_outlined)),
-          BottomNavigationBarItem(
-              label: 'VR', icon: Icon(Icons.threesixty)),
-          BottomNavigationBarItem(
-              label: 'Search', icon: Icon(Icons.search)),
+          BottomNavigationBarItem(label: 'VR', icon: Icon(Icons.threesixty)),
+          BottomNavigationBarItem(label: 'Search', icon: Icon(Icons.search)),
           BottomNavigationBarItem(
               label: 'Plan', icon: Icon(Icons.assistant_outlined)),
           BottomNavigationBarItem(

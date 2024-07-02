@@ -60,16 +60,20 @@ class PopularPlacesPage extends StatelessWidget {
 
   Widget popularPlaceCard(BuildContext context, Place place) {
     return GestureDetector(
-      onTap: place.name == "Ratargul"
-          ? () {
+      onTap: () {
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) => DestinationDetailsPage(title: 'i', location: 'i', rating: 5.9, imageUrl: 'i', description: 'i',),
+            builder: (context) => DestinationDetailsPage(
+              title: place.name,
+              location: place.location,
+              rating: place.rating,
+              imageUrl: place.imageUrl,
+              description: "Ratargul Swamp Forest is a freshwater swamp forest in Bangladesh and one of the few freshwater swamp forests in the world. You can never imagine how silence could be so enjoyable until you visit the amazing beauty.",
+            ),
           ),
         );
-      }
-         :null,
+      },
       child: Card(
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(16),
@@ -159,27 +163,27 @@ final List<Place> places = [
     location: "Gowainghat, Sylhet",
     rating: 4.7,
     price: 4590,
-    imageUrl: "assets/Ratargul.jpg",
+    imageUrl: "assets/images/Ratargul.jpg",
   ),
   Place(
     name: "Shada Pathor",
     location: "Bholaganj, Sylhet",
     rating: 4.8,
     price: 8940,
-    imageUrl: "assets/Shada Pathor.jpg",
+    imageUrl: "assets/images/Shada Pathor.jpg",
   ),
   Place(
     name: "Jaflong",
     location: "Tamabil, Sylhet",
     rating: 4.3,
     price: 7610,
-    imageUrl: "assets/jaflong.jpg",
+    imageUrl: "assets/images/jaflong.jpg",
   ),
   Place(
     name: "Lalakhal",
     location: "Jaintapur, Sylhet",
     rating: 4.5,
     price: 8570,
-    imageUrl: "assets/lalakhal.jpg",
+    imageUrl: "assets/images/lalakhal.jpg",
   ),
 ];
