@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:tripwise/pages/navpages/main_page.dart';
+import 'package:tripwise/pages/navpages/signin.dart';
 import 'package:tripwise/pages/welcome_page.dart';
 
 void main() {
@@ -23,7 +24,9 @@ class MyApp extends StatelessWidget {
               Theme.of(context).textTheme,
             )),
 
-        home: const WelcomePage());
+        home: SignIn(),
+       // debugShowCheckedModeBanner: false,
+    );
 
   }
 }
