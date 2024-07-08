@@ -4,8 +4,13 @@ import 'package:tripwise/pages/navpages/plan_page.dart';
 import 'package:tripwise/pages/navpages/profile_page.dart';
 import 'package:tripwise/pages/navpages/search_page.dart';
 import 'package:tripwise/pages/navpages/vr_page.dart';
+
 import 'package:tripwise/pages/navpages/popular_places.dart';
 import 'package:tripwise/pages/navpages/booking_page.dart';
+import 'package:tripwise/pages/navpages/onboard_info_1.dart';
+import 'package:tripwise/pages/navpages/settings_page.dart';
+import 'package:tripwise/pages/navpages/onboard_info_3.dart';
+import 'package:tripwise/pages/navpages/onboard_info_2.dart';
 
 class MainPage extends StatefulWidget {
   const MainPage({super.key});
@@ -23,6 +28,10 @@ class _MainPageState extends State<MainPage> {
     profilePage(),
     PopularPlacesPage(),
     BookingPage(),
+    OnboardInfoFillup1(),
+    SettingsPage(),
+    OnboardInfoFillup2(),
+    OnboardInfoFillup3(),
   ];
 
   // Map BottomNavigationBar indices to page indices
