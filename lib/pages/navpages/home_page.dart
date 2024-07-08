@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class  homePage extends StatelessWidget {
-  const homePage({super.key});
+  final User? user;
+
+  const homePage({Key? key, this.user}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

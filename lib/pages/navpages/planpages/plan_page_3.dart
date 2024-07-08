@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:tripwise/pages/navpages/plan_page.dart';
+import 'package:tripwise/pages/navpages/planpages/plan_page_2.dart';
 import 'package:tripwise/pages/navpages/planpages/plan_page_final.dart';
 
 class PlanPage3 extends StatefulWidget {
@@ -34,7 +36,7 @@ class _PlanPage3State extends State<PlanPage3> {
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
           onPressed: () {
-            // Handle back button action
+            Navigator.push(context, MaterialPageRoute(builder: (context)=>const PlanPage2()));
           },
         ),
       ),
@@ -100,31 +102,7 @@ class _PlanPage3State extends State<PlanPage3> {
           ],
         ),
       ),
-      bottomNavigationBar: BottomNavigationBar(
-        items: const <BottomNavigationBarItem>[
-          BottomNavigationBarItem(
-            icon: Icon(Icons.home),
-            label: 'Home',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.vrpano),
-            label: 'VR',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.search),
-            label: 'Plan',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.person),
-            label: 'Profile',
-          ),
-        ],
-        currentIndex: 2,
-        selectedItemColor: Colors.blue,
-        onTap: (index) {
-          // Handle bottom navigation tap
-        },
-      ),
+
     );
   }
 }

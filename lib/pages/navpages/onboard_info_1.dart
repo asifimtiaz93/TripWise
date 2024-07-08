@@ -1,5 +1,7 @@
 // onboard_info_fillup_1.dart
 import 'package:flutter/material.dart';
+import 'home_page.dart';
+import 'main_page.dart';
 import 'onboard_info_2.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -19,7 +21,23 @@ class OnboardInfoFillup1 extends StatelessWidget {
             Navigator.pop(context);
           },
         ),
+        actions: [
+          TextButton(
+            onPressed: () {
+              Navigator.pushAndRemoveUntil(
+                context,
+                MaterialPageRoute(builder: (context) => MainPage()), // Replace HomePage with your home page widget
+                    (Route<dynamic> route) => false,
+              );
+            },
+            child: Text(
+              'Skip',
+              style: TextStyle(color: Colors.black),
+            ),
+          ),
+        ],
       ),
+
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(

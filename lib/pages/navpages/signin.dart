@@ -1,5 +1,9 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:tripwise/pages/navpages/signup.dart';
+import 'package:tripwise/pages/navpages/home_page.dart';
+
+
 
 class SignInPage extends StatefulWidget {
   const SignInPage({super.key});
@@ -12,17 +16,50 @@ class _SignInPageState extends State<SignInPage> {
   final FirebaseAuth _auth = FirebaseAuth.instance;
 
   User? _user;
+  final _emailController = TextEditingController();
+  final _passwordController = TextEditingController();
+  bool _isLoading = false;
 
   @override
   void initState() {
-
     super.initState();
     _auth.authStateChanges().listen((event) {
       setState(() {
         _user = event;
       });
     });
+  }
 
+  void _handleEmailSignIn() async {
+    setState(() {
+      _isLoading = true;
+    });
+
+    try {
+      await _auth.signInWithEmailAndPassword(
+        email: _emailController.text,
+        password: _passwordController.text,
+      );
+
+      // Navigate to home page after successful sign-in
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+          builder: (context) => homePage(user: _user),
+        ),
+      );
+    } on FirebaseAuthException catch (e) {
+      // Show error message
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(e.message ?? 'Sign in failed'),
+        ),
+      );
+    }
+
+    setState(() {
+      _isLoading = false;
+    });
   }
 
   @override
@@ -44,7 +81,6 @@ class _SignInPageState extends State<SignInPage> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-
             Center(
               child: Text(
                 'Sign In',
@@ -66,6 +102,7 @@ class _SignInPageState extends State<SignInPage> {
             ),
             SizedBox(height: 20),
             TextField(
+              controller: _emailController,
               decoration: InputDecoration(
                 labelText: 'Email',
                 border: OutlineInputBorder(),
@@ -73,6 +110,7 @@ class _SignInPageState extends State<SignInPage> {
             ),
             SizedBox(height: 20),
             TextField(
+              controller: _passwordController,
               obscureText: true,
               decoration: InputDecoration(
                 labelText: 'Password',
@@ -103,10 +141,12 @@ class _SignInPageState extends State<SignInPage> {
               child: SizedBox(
                 width: 250,
                 child: ElevatedButton(
-                  onPressed: () {
-                    // Implement sign in functionality
-                  },
-                  child: Text('Sign In'),
+                  onPressed: _isLoading ? null : _handleEmailSignIn,
+                  child: _isLoading
+                      ? CircularProgressIndicator(
+                    valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+                  )
+                      : Text('Sign In'),
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.blue,
                     foregroundColor: Colors.white,
@@ -123,7 +163,10 @@ class _SignInPageState extends State<SignInPage> {
                 Text('Don’t have an account?'),
                 TextButton(
                   onPressed: () {
-                    // Implement sign up navigation
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => const SignUpPage()),
+                    );
                   },
                   child: Text(
                     'Sign up',
@@ -157,8 +200,6 @@ class _SignInPageState extends State<SignInPage> {
                 ],
               ),
             ),
-
-
           ],
         ),
       ),
@@ -178,11 +219,11 @@ class _SignInPageState extends State<SignInPage> {
     );
   }
 
-  void _handleGoogleSignIn(){
-    try{
+  void _handleGoogleSignIn() {
+    try {
       GoogleAuthProvider _googleAuthProvider = GoogleAuthProvider();
       _auth.signInWithProvider(_googleAuthProvider);
-    } catch (error){
+    } catch (error) {
       print(error);
     }
   }

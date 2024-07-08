@@ -58,7 +58,9 @@ class _WelcomePageState extends State<WelcomePage> {
                         children: [
                           AppLargeText(
 
-                            text: "Trips",
+                            text: "TripWise",
+                            color: Colors.white,
+                            size: 60,
                           ),
                           AppText(
 
@@ -72,19 +74,20 @@ class _WelcomePageState extends State<WelcomePage> {
 
                             size: 30,
                           ),
+                          SizedBox(height: 100,),
                           Container(
                             width: 250,
                             child: AppText(
                               text:
 
-                              "To get the best of your adventure you just need to leave and go where you like. we are waiting for you",
+                              "To get the best of your adventures you just need to leave and go where you like. we are waiting for you !!",
                               color: Colors.white,
                             ),
                           ),
                           SizedBox(height: 40,),
                           GestureDetector(
                             onTap: _navigatetoPop,
-                            child: ResponsiveButton(width: 120,text: 'Next',),
+                            child: ResponsiveButton(width: 120,text: 'Next', ),
 
                           ),
 

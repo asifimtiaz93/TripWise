@@ -2,9 +2,33 @@ import 'package:flutter/material.dart';
 import 'package:tripwise/pages/navpages/planpages/plan_page_2.dart';
 import 'package:tripwise/widgets/app_large_text.dart';
 import 'package:tripwise/widgets/app_text.dart';
+import 'package:intl/intl.dart';
 
-class PlanPage1 extends StatelessWidget {
+class PlanPage1 extends StatefulWidget {
   const PlanPage1({super.key});
+
+  @override
+  State<PlanPage1> createState() => _PlanPage1State();
+}
+
+class _PlanPage1State extends State<PlanPage1> {
+  DateTimeRange? _selectedDateRange;
+  int get _totalDays => _selectedDateRange != null
+      ? _selectedDateRange!.end.difference(_selectedDateRange!.start).inDays + 1
+      : 0;
+
+  Future<void> _selectDateRange(BuildContext context) async {
+    final DateTimeRange? picked = await showDateRangePicker(
+      context: context,
+      firstDate: DateTime.now(),
+      lastDate: DateTime(DateTime.now().year + 1),
+    );
+    if (picked != null && picked != _selectedDateRange) {
+      setState(() {
+        _selectedDateRange = picked;
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -24,95 +48,53 @@ class PlanPage1 extends StatelessWidget {
               height: 16,
             ),
             const Text(
-              'Choose a date/range',
+              'Choose a date range',
               style: TextStyle(fontSize: 16),
             ),
             const SizedBox(
               height: 46,
             ),
-            Container(
-              padding: const EdgeInsets.all(8.0),
-              decoration: BoxDecoration(
-                color: Colors.grey[300],
-                borderRadius: BorderRadius.circular(25.0),
-              ),
-              child: const Text(
-                'Trip Length',
-                style: TextStyle(fontSize: 16),
+            GestureDetector(
+              onTap: () => _selectDateRange(context),
+              child: Container(
+                padding: const EdgeInsets.all(8.0),
+                decoration: BoxDecoration(
+                  color: Colors.grey[300],
+                  borderRadius: BorderRadius.circular(25.0),
+                ),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      _selectedDateRange == null
+                          ? 'Select Date Range'
+                          : '${DateFormat('dd/MM/yyyy').format(_selectedDateRange!.start)} - ${DateFormat('dd/MM/yyyy').format(_selectedDateRange!.end)}',
+                      style: TextStyle(fontSize: 16),
+                    ),
+                    Icon(Icons.calendar_today),
+                  ],
+                ),
               ),
             ),
             const SizedBox(
               height: 16,
             ),
-            Row(
-              children: [
-                AppText(
-                  text: 'Total days',
-                  size: 18,
-                  color: Colors.black,
-                ),
-                const Spacer(),
-                IconButton(
-                  onPressed: () {},
-                  icon: const Icon(Icons.remove),
-                  color: Colors.black,
-                  iconSize: 20,
-                  constraints: BoxConstraints.tightFor(width: 32, height: 32),
-                  padding: EdgeInsets.zero,
-                  splashRadius: 24,
-                  splashColor: Colors.black26,
-                  hoverColor: Colors.black26,
-                  highlightColor: Colors.black26,
-                  tooltip: 'Decrease',
-                  visualDensity: VisualDensity.compact,
-                ),
-                const SizedBox(width: 8),
-                const Text(
-                  '3',
-                  style: TextStyle(fontSize: 18),
-                ),
-                const SizedBox(width: 8),
-                IconButton(
-                  onPressed: () {},
-                  icon: const Icon(Icons.add),
-                  color: Colors.black,
-                  iconSize: 20,
-                  constraints: BoxConstraints.tightFor(width: 32, height: 32),
-                  padding: EdgeInsets.zero,
-                  splashRadius: 24,
-                  splashColor: Colors.black26,
-                  hoverColor: Colors.black26,
-                  highlightColor: Colors.black26,
-                  tooltip: 'Increase',
-                  visualDensity: VisualDensity.compact,
-                ),
-              ],
-            ),
-            const SizedBox(
-              height: 50.0,
-            ),
-            AppText(
-              text: 'During which month?',
-              size: 18,
-            ),
-            const SizedBox(
-              height: 16,
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: const [
-                MonthCard(month: 'May'),
-                MonthCard(month: 'June'),
-                MonthCard(month: 'July'),
-                MonthCard(month: 'August'),
-              ],
-            ),
+            if (_selectedDateRange != null)
+              AppText(
+                text: 'Total days: $_totalDays',
+                size: 18,
+                color: Colors.black,
+              ),
             const Spacer(),
             Center(
               child: ElevatedButton(
-                onPressed: () {
-                  Navigator.push(context,
-                    MaterialPageRoute(builder: (context)=>const PlanPage2()),
+                onPressed: _selectedDateRange == null
+                    ? null
+                    : () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => const PlanPage2()),
                   );
                 },
                 child: const Text('Next'),
@@ -134,27 +116,3 @@ class PlanPage1 extends StatelessWidget {
     );
   }
 }
-
-class MonthCard extends StatelessWidget {
-  final String month;
-  const MonthCard({required this.month, Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Icon(
-          Icons.calendar_today,
-          size: 48,
-        ),
-        const SizedBox(height: 8),
-        Text(
-          month,
-          style: const TextStyle(fontSize: 16),
-        ),
-      ],
-    );
-  }
-}
-
-

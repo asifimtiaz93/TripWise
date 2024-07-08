@@ -3,8 +3,30 @@ import 'package:tripwise/pages/navpages/planpages/plan_page_3.dart';
 import 'package:tripwise/widgets/app_large_text.dart';
 import 'package:tripwise/widgets/app_text.dart';
 
-class PlanPage2 extends StatelessWidget {
+class PlanPage2 extends StatefulWidget {
   const PlanPage2({super.key});
+
+  @override
+  State<PlanPage2> createState() => _PlanPage2State();
+}
+
+class _PlanPage2State extends State<PlanPage2> {
+  String? _selectedOption;
+  String? _travelWithChildren;
+
+  void _selectOption(String option) {
+    setState(() {
+      _selectedOption = option;
+      // Reset _travelWithChildren when option changes
+      _travelWithChildren = null;
+    });
+  }
+
+  void _selectTravelWithChildren(String option) {
+    setState(() {
+      _travelWithChildren = option;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -36,63 +58,79 @@ class PlanPage2 extends StatelessWidget {
                 crossAxisCount: 2,
                 crossAxisSpacing: 8,
                 mainAxisSpacing: 8,
-                children: const [
+                children: [
                   SelectableCard(
                     icon: Icons.person,
-                    label: 'Solo',
-                  ),
-                  SelectableCard(
-                    icon: Icons.favorite,
-                    label: 'Partner',
+                    label: 'Single',
+                    selected: _selectedOption == 'Single',
+                    onTap: () => _selectOption('Single'),
                   ),
                   SelectableCard(
                     icon: Icons.group,
-                    label: 'Friends',
-                  ),
-                  SelectableCard(
-                    icon: Icons.family_restroom,
-                    label: 'Family',
+                    label: 'Family and Friends',
+                    selected: _selectedOption == 'Family and Friends',
+                    onTap: () => _selectOption('Family and Friends'),
                   ),
                 ],
               ),
             ),
-            const SizedBox(
-              height: 16,
-            ),
-            AppText(
-              text: 'Are you traveling with children?',
-              size: 18,
-            ),
-            const SizedBox(
-              height: 16,
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                OutlinedButton(
-                  onPressed: () {},
-                  child: const Text('Yes'),
-                  style: OutlinedButton.styleFrom(
-                    padding: const EdgeInsets.symmetric(horizontal: 40),
+            if (_selectedOption == 'Family and Friends') // Show only if Family and Friends is selected
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const SizedBox(
+                    height: 16,
                   ),
-                ),
-                OutlinedButton(
-                  onPressed: () {},
-                  child: const Text('No'),
-                  style: OutlinedButton.styleFrom(
-                    padding: const EdgeInsets.symmetric(horizontal: 40),
+                  AppText(
+                    text: 'Are you traveling with children?',
+                    size: 18,
                   ),
-                ),
-              ],
-            ),
+                  const SizedBox(
+                    height: 16,
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      OutlinedButton(
+                        onPressed: () => _selectTravelWithChildren('Yes'),
+                        child: const Text('Yes'),
+                        style: OutlinedButton.styleFrom(
+                          padding: const EdgeInsets.symmetric(horizontal: 40),
+                          backgroundColor:
+                          _travelWithChildren == 'Yes' ? Colors.blue : Colors.transparent,
+                          disabledBackgroundColor:
+                          _travelWithChildren == 'Yes' ? Colors.white : Colors.black,
+                        ),
+                      ),
+                      OutlinedButton(
+                        onPressed: () => _selectTravelWithChildren('No'),
+                        child: const Text('No'),
+                        style: OutlinedButton.styleFrom(
+                          padding: const EdgeInsets.symmetric(horizontal: 40),
+                          backgroundColor:
+                          _travelWithChildren == 'No' ? Colors.blue : Colors.transparent,
+                          disabledBackgroundColor:
+                          _travelWithChildren == 'No' ? Colors.white : Colors.black,
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
             const Spacer(),
             Center(
               child: ElevatedButton(
-                onPressed: () {
-                  Navigator.push(context,
-                    MaterialPageRoute(builder: (context)=>const PlanPage3()),
+                onPressed: _selectedOption != null &&
+                    (_selectedOption != 'Family and Friends' || _travelWithChildren != null)
+                    ? () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const PlanPage3(),
+                    ),
                   );
-                },
+                }
+                    : null,
                 child: const Text('Next'),
                 style: ElevatedButton.styleFrom(
                   padding: const EdgeInsets.symmetric(
@@ -116,29 +154,45 @@ class PlanPage2 extends StatelessWidget {
 class SelectableCard extends StatelessWidget {
   final IconData icon;
   final String label;
-  const SelectableCard({required this.icon, required this.label, Key? key})
-      : super(key: key);
+  final bool selected;
+  final VoidCallback onTap;
+
+  const SelectableCard({
+    required this.icon,
+    required this.label,
+    required this.selected,
+    required this.onTap,
+    Key? key,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return AspectRatio(
       aspectRatio: 1.0,
       child: GestureDetector(
-        onTap: () {
-          // Handle card tap
-        },
+        onTap: onTap,
         child: Container(
           decoration: BoxDecoration(
-            border: Border.all(color: Colors.black),
+            border: Border.all(
+              color: selected ? Colors.blue : Colors.black,
+              width: selected ? 2.0 : 1.0,
+            ),
             borderRadius: BorderRadius.circular(8),
+            color: selected ? Colors.blue.withOpacity(0.3) : Colors.transparent,
           ),
-          padding: const EdgeInsets.all(8), // Reduced padding to make the box smaller
+          padding: const EdgeInsets.all(8),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Icon(icon, size: 30), // Reduced icon size
-              const SizedBox(height: 4), // Reduced space between icon and text
-              Text(label, style: const TextStyle(fontSize: 14)), // Reduced font size
+              Icon(icon, size: 30, color: selected ? Colors.blue : Colors.black),
+              const SizedBox(height: 4),
+              Text(
+                label,
+                style: TextStyle(
+                  fontSize: 14,
+                  color: selected ? Colors.blue : Colors.black,
+                ),
+              ),
             ],
           ),
         ),
@@ -146,4 +200,3 @@ class SelectableCard extends StatelessWidget {
     );
   }
 }
-
