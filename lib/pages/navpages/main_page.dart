@@ -3,8 +3,8 @@ import 'package:tripwise/pages/navpages/home_page.dart';
 import 'package:tripwise/pages/navpages/plan_page.dart';
 import 'package:tripwise/pages/navpages/profile_page.dart';
 import 'package:tripwise/pages/navpages/search_page.dart';
+import 'package:tripwise/pages/navpages/signin.dart';
 import 'package:tripwise/pages/navpages/vr_page.dart';
-
 import 'package:tripwise/pages/navpages/popular_places.dart';
 import 'package:tripwise/pages/navpages/booking_page.dart';
 import 'package:tripwise/pages/navpages/onboard_info_1.dart';
@@ -28,10 +28,13 @@ class _MainPageState extends State<MainPage> {
     profilePage(),
     PopularPlacesPage(),
     BookingPage(),
+    SignInPage(),
     OnboardInfoFillup1(),
     SettingsPage(),
     OnboardInfoFillup2(),
     OnboardInfoFillup3(),
+
+
   ];
 
   // Map BottomNavigationBar indices to page indices
@@ -114,6 +117,11 @@ class _MainPageState extends State<MainPage> {
               leading: Icon(Icons.book_online),
               title: Text('Booking'),
               onTap: () => onDrawerTapped(6),
+            ),
+            ListTile(
+              leading: Icon(Icons.login),
+              title: Text('Sign In'),
+              onTap: ()=>onDrawerTapped(7),
             ),
           ],
         ),
