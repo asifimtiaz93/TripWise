@@ -23,7 +23,7 @@ class _MainPageState extends State<MainPage> {
   List<Widget> pages = [
     homePage(),
     vrPage(),
-    searchPage(),
+    SearchPage(),
     planPage(),
     profilePage(),
     PopularPlacesPage(),
