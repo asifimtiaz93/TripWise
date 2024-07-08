@@ -7,6 +7,7 @@ import 'package:tripwise/widgets/responsive_button.dart';
 import '../misc/colors.dart';
 
 import 'navpages/main_page.dart';
+import 'navpages/onboard_info_1.dart';
 
 
 class WelcomePage extends StatefulWidget {
@@ -27,7 +28,7 @@ class _WelcomePageState extends State<WelcomePage> {
   void _navigatetoPop() {
     Navigator.push(
       context,
-      MaterialPageRoute(builder: (context) => const MainPage()),
+      MaterialPageRoute(builder: (context) => const OnboardInfoFillup1()),
     );
   }
 
@@ -74,11 +75,11 @@ class _WelcomePageState extends State<WelcomePage> {
                           Container(
                             width: 250,
                             child: AppText(
-                                text:
+                              text:
 
-                                    "To get the best of your adventure you just need to leave and go where you like. we are waiting for you",
-                                 color: Colors.white,
-                                ),
+                              "To get the best of your adventure you just need to leave and go where you like. we are waiting for you",
+                              color: Colors.white,
+                            ),
                           ),
                           SizedBox(height: 40,),
                           GestureDetector(
