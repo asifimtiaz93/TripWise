@@ -13,6 +13,13 @@ class homePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        title: Text(
+          'TripWise',
+          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 28),
+        ),
+      ),
+
       backgroundColor: Colors.white,
       body: SingleChildScrollView(
         child: Padding(

@@ -72,10 +72,7 @@ class _MainPageState extends State<MainPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(
-          'TripWise',
-          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 28),
-        ),
+
       ),
       drawer: Drawer(
         child: ListView(
