@@ -2,6 +2,11 @@
 
 import 'package:flutter/material.dart';
 import 'booking_page.dart';
+<<<<<<< Updated upstream
+=======
+import 'main_page.dart';
+import 'reviews_page.dart';  // Import the reviews page
+>>>>>>> Stashed changes
 
 class DestinationDetailsPage extends StatelessWidget {
   final String title;
@@ -34,11 +39,18 @@ class DestinationDetailsPage extends StatelessWidget {
                 fit: BoxFit.cover,
               ),
             ),
-            leading: IconButton(
-              icon: Icon(Icons.arrow_back),
-              onPressed: () {
-                Navigator.pop(context);
-              },
+            leading: Container(
+              margin: const EdgeInsets.all(8.0),
+              decoration: BoxDecoration(
+                color: Colors.black,
+                shape: BoxShape.circle,
+              ),
+              child: IconButton(
+                icon: Icon(Icons.arrow_back, color: Colors.white),
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+              ),
             ),
           ),
           SliverList(
@@ -65,11 +77,38 @@ class DestinationDetailsPage extends StatelessWidget {
                           style: TextStyle(fontSize: 16, color: Colors.grey),
                         ),
                         Spacer(),
-                        Icon(Icons.star, color: Colors.amber),
-                        SizedBox(width: 4),
-                        Text(
-                          rating.toString(),
-                          style: TextStyle(fontSize: 16),
+                        GestureDetector(
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => ReviewsPage(
+                                  title: title,
+                                  imageUrl: imageUrl,
+                                ),
+                              ),
+                            );
+                          },
+                          child: MouseRegion(
+                            cursor: SystemMouseCursors.click,
+                            child: Container(
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(8.0),
+                                color: Colors.grey.shade200,
+                              ),
+                              padding: EdgeInsets.symmetric(horizontal: 8.0, vertical: 4.0),
+                              child: Row(
+                                children: [
+                                  Icon(Icons.star, color: Colors.amber),
+                                  SizedBox(width: 4),
+                                  Text(
+                                    rating.toString(),
+                                    style: TextStyle(fontSize: 16),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
                         ),
                       ],
                     ),
@@ -134,10 +173,10 @@ class DestinationDetailsPage extends StatelessWidget {
           ),
         ],
       ),
-
     );
   }
 }
+<<<<<<< Updated upstream
 
 // Usage Example:
 void main() {
@@ -151,3 +190,5 @@ void main() {
     ),
   ));
 }
+=======
+>>>>>>> Stashed changes

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:tripwise/pages/navpages/home_page.dart';
 import 'package:tripwise/pages/navpages/plan_page.dart';
+import 'package:tripwise/pages/navpages/reviews_page.dart';
 import 'package:tripwise/pages/navpages/profile_page.dart';
 import 'package:tripwise/pages/navpages/search_page.dart';
 import 'package:tripwise/pages/navpages/vr_page.dart';
@@ -23,6 +24,15 @@ class _MainPageState extends State<MainPage> {
     profilePage(),
     PopularPlacesPage(),
     BookingPage(),
+<<<<<<< Updated upstream
+=======
+    SignInPage(),
+    OnboardInfoFillup1(),
+    SettingsPage(),
+    OnboardInfoFillup2(),
+    OnboardInfoFillup3(),
+
+>>>>>>> Stashed changes
   ];
   int bottomNavIndex = 0;
   int drawerIndex = 0;

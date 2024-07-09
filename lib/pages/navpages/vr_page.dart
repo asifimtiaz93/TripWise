@@ -1,8 +1,22 @@
-import 'package:flutter/material.dart';
-import 'package:video_player/video_player.dart';
+// lib/pages/navpages/vr_page.dart
 
-class vrPage extends StatelessWidget {
+import 'package:flutter/material.dart';
+<<<<<<< Updated upstream
+import 'package:video_player/video_player.dart';
+=======
+import 'package:youtube_player_flutter/youtube_player_flutter.dart';
+import 'package:google_fonts/google_fonts.dart';
+>>>>>>> Stashed changes
+
+class vrPage extends StatefulWidget {
   const vrPage({super.key});
+
+  @override
+  _vrPageState createState() => _vrPageState();
+}
+
+class _vrPageState extends State<vrPage> {
+  List<String> _selectedChips = [];
 
   @override
   Widget build(BuildContext context) {
@@ -29,19 +43,44 @@ class vrPage extends StatelessWidget {
                     children: [
                       Wrap(
                         spacing: 8.0,
-                        children: [
-                          Chip(label: Text('Cox\'s Bazar')),
-                          Chip(label: Text('Sylhet')),
-                          Chip(label: Text('Chattogram')),
-                          Chip(label: Text('Rangpur')),
-                        ],
+                        children: List<Widget>.generate(
+                          _chipLabels.length,
+                              (int index) {
+                            return FilterChip(
+                              label: Text(_chipLabels[index]),
+                              selected: _selectedChips.contains(_chipLabels[index]),
+                              selectedColor: Colors.black,
+                              backgroundColor: Colors.white,
+                              labelStyle: TextStyle(
+                                color: _selectedChips.contains(_chipLabels[index]) ? Colors.white : Colors.black,
+                                fontWeight: FontWeight.bold,
+                              ),
+                              side: BorderSide(
+                                color: Colors.black,
+                                width: 2.0,
+                              ),
+                              onSelected: (bool selected) {
+                                setState(() {
+                                  if (selected) {
+                                    _selectedChips.add(_chipLabels[index]);
+                                  } else {
+                                    _selectedChips.removeWhere((String name) => name == _chipLabels[index]);
+                                  }
+                                });
+                              },
+                              showCheckmark: false,
+                            );
+                          },
+                        ),
                       ),
                       SizedBox(height: 16),
                       Text(
-                        "360 Videos",
-                        style: TextStyle(
-                          fontSize: 24,
-                          fontWeight: FontWeight.bold,
+                        "Explore Beautiful Bangladesh",
+                        style: GoogleFonts.pacifico(
+                          textStyle: TextStyle(
+                            fontSize: 24,
+                            fontWeight: FontWeight.bold,
+                          ),
                         ),
                       ),
                       SizedBox(height: 16),
@@ -84,7 +123,17 @@ class vrPage extends StatelessWidget {
     );
   }
 
+<<<<<<< Updated upstream
   Widget tourVideoCard(BuildContext context, String videoUrl, String title) {
+=======
+  static const List<String> _chipLabels = [
+    'Cox\'s Bazar',
+    'Sylhet',
+    'Chattogram',
+  ];
+
+  Widget tourVideoCard(BuildContext context, String videoId, String title) {
+>>>>>>> Stashed changes
     return GestureDetector(
       onTap: () {
         Navigator.push(
