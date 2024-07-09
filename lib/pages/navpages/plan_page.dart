@@ -88,7 +88,8 @@ class planPage extends StatelessWidget {
           width: 100,
           fit: BoxFit.cover,
         ),
-        title: Text(title),
+        title: Text(title,
+            style: TextStyle(fontWeight: FontWeight.bold)),
         subtitle: Text(subtitle),
         onTap: () {
           // Handle card tap

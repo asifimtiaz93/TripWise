@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:video_player/video_player.dart';
+import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 
 class vrPage extends StatelessWidget {
   const vrPage({super.key});
@@ -7,38 +7,18 @@ class vrPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        title: const Text(
+          "Discover Bangladesh",
+          style: TextStyle(
+            color: Colors.white,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        backgroundColor: Colors.black,
+      ),
       body: CustomScrollView(
         slivers: [
-          SliverAppBar(
-            expandedHeight: 200.0,
-            pinned: true,
-            flexibleSpace: FlexibleSpaceBar(
-              title: Text(
-                "Explore Bangladesh in VR!",
-                style: TextStyle(
-                  color: Colors.black,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              background: Container(
-                color: Colors.blueAccent, // Background color instead of an image
-              ),
-            ),
-            leading: IconButton(
-              icon: Icon(Icons.arrow_back, color: Colors.black),
-              onPressed: () {
-                Navigator.pop(context);
-              },
-            ),
-            actions: [
-              IconButton(
-                icon: Icon(Icons.settings, color: Colors.black),
-                onPressed: () {
-                  // Add your settings functionality here
-                },
-              ),
-            ],
-          ),
           SliverList(
             delegate: SliverChildListDelegate(
               [
@@ -56,7 +36,7 @@ class vrPage extends StatelessWidget {
                           Chip(label: Text('Rangpur')),
                         ],
                       ),
-                      SizedBox(height: 16),
+                      SizedBox(height: 10),
                       Text(
                         "360 Videos",
                         style: TextStyle(
@@ -64,19 +44,11 @@ class vrPage extends StatelessWidget {
                           fontWeight: FontWeight.bold,
                         ),
                       ),
-                      SizedBox(height: 16),
-                      Container(
-                        height: 200,
-                        child: ListView(
-                          scrollDirection: Axis.horizontal,
-                          children: [
-                            tourVideoCard('assets/videos/beach_cox.mp4', 'Shugondha Beach'),
-                            tourVideoCard('assets/videos/kaptai.mp4', 'Kaptai'),
-                            // Add more tourVideoCard widgets as needed
-                          ],
-                        ),
-                      ),
-                      SizedBox(height: 16),
+                      SizedBox(height: 10),
+                      tourVideoCard(context, '-758gHCMn0M', 'Shugondha Beach'),
+                      SizedBox(height: 10),
+                      tourVideoCard(context, 'mH4tCp0utH4', 'Kaptai'),
+                      SizedBox(height: 10),
                       Text(
                         "Tour Videos",
                         style: TextStyle(
@@ -84,18 +56,10 @@ class vrPage extends StatelessWidget {
                           fontWeight: FontWeight.bold,
                         ),
                       ),
-                      SizedBox(height: 16),
-                      Container(
-                        height: 200,
-                        child: ListView(
-                          scrollDirection: Axis.horizontal,
-                          children: [
-                            tourVideoCard('assets/videos/nature_bd.mp4', 'Into the Nature'),
-                            tourVideoCard('assets/videos/puran_dhaka.mp4', 'Puran Dhaka'),
-                            // Add more tourVideoCard widgets as needed
-                          ],
-                        ),
-                      ),
+                      SizedBox(height: 10),
+                      tourVideoCard(context, 'sffrf1ZvtlM', 'Into the Nature'),
+                      SizedBox(height: 10),
+                      tourVideoCard(context, 'tbvK3nac8to', 'Puran Dhaka'),
                     ],
                   ),
                 ),
@@ -104,63 +68,73 @@ class vrPage extends StatelessWidget {
           ),
         ],
       ),
-
     );
   }
 
-  Widget tourVideoCard(String videoUrl, String title) {
-    return Container(
-      width: 160,
-      margin: EdgeInsets.only(right: 16),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          ClipRRect(
-            borderRadius: BorderRadius.circular(12),
-            child: TourVideoPlayer(videoUrl: videoUrl),
+  Widget tourVideoCard(BuildContext context, String videoId, String title) {
+    return GestureDetector(
+      onTap: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => FullScreenVideoPlayer(videoId: videoId, title: title),
           ),
-          SizedBox(height: 8),
-          Text(
-            title,
-            style: TextStyle(
-              fontSize: 16,
-              fontWeight: FontWeight.bold,
+        );
+      },
+      child: Container(
+        width: double.infinity,
+        margin: EdgeInsets.only(bottom: 16),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            ClipRRect(
+              borderRadius: BorderRadius.circular(12),
+              child: TourVideoPlayer(videoId: videoId),
             ),
-          ),
-          Text(
-            'Uploaded by Md. Rahman\n20 May 2024',
-            style: TextStyle(
-              fontSize: 12,
-              color: Colors.grey,
+            SizedBox(height: 8),
+            Text(
+              title,
+              style: TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.bold,
+              ),
             ),
-          ),
-        ],
+            Text(
+              'Uploaded by Nofaer\n20 May 2024',
+              style: TextStyle(
+                fontSize: 12,
+                color: Colors.grey,
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
 }
 
 class TourVideoPlayer extends StatefulWidget {
-  final String videoUrl;
+  final String videoId;
 
-  const TourVideoPlayer({Key? key, required this.videoUrl}) : super(key: key);
+  const TourVideoPlayer({Key? key, required this.videoId}) : super(key: key);
 
   @override
   _TourVideoPlayerState createState() => _TourVideoPlayerState();
 }
 
 class _TourVideoPlayerState extends State<TourVideoPlayer> {
-  late VideoPlayerController _controller;
+  late YoutubePlayerController _controller;
 
   @override
   void initState() {
     super.initState();
-    _controller = VideoPlayerController.asset(widget.videoUrl)
-      ..initialize().then((_) {
-        setState(() {});
-        _controller.setLooping(true);
-        _controller.play();
-      });
+    _controller = YoutubePlayerController(
+      initialVideoId: widget.videoId,
+      flags: YoutubePlayerFlags(
+        autoPlay: false,
+        mute: false,
+      ),
+    );
   }
 
   @override
@@ -171,18 +145,40 @@ class _TourVideoPlayerState extends State<TourVideoPlayer> {
 
   @override
   Widget build(BuildContext context) {
-    return _controller.value.isInitialized
-        ? AspectRatio(
-      aspectRatio: _controller.value.aspectRatio,
-      child: VideoPlayer(_controller),
-    )
-        : Container(
-      height: 120,
-      color: Colors.black,
-      child: Center(
-        child: CircularProgressIndicator(),
-      ),
+    return YoutubePlayer(
+      controller: _controller,
+      showVideoProgressIndicator: true,
+      progressIndicatorColor: Colors.red,
     );
   }
 }
 
+class FullScreenVideoPlayer extends StatelessWidget {
+  final String videoId;
+  final String title;
+
+  const FullScreenVideoPlayer({Key? key, required this.videoId, required this.title}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(title),
+        backgroundColor: Colors.blueAccent,
+      ),
+      body: Center(
+        child: YoutubePlayer(
+          controller: YoutubePlayerController(
+            initialVideoId: videoId,
+            flags: YoutubePlayerFlags(
+              autoPlay: true,
+              mute: false,
+            ),
+          ),
+          showVideoProgressIndicator: true,
+          progressIndicatorColor: Colors.red,
+        ),
+      ),
+    );
+  }
+}

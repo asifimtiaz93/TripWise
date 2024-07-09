@@ -65,7 +65,10 @@ class _MainPageState extends State<MainPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('TripWise'),
+        title: Text('TripWise',
+            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 28),
+
+        ),
       ),
       drawer: Drawer(
         child: ListView(
@@ -89,8 +92,8 @@ class _MainPageState extends State<MainPage> {
               onTap: () => onDrawerTapped(0),
             ),
             ListTile(
-              leading: Icon(Icons.threesixty),
-              title: Text('VR'),
+              leading: Icon(Icons.video_collection),
+              title: Text('Discover'),
               onTap: () => onDrawerTapped(1),
             ),
             ListTile(
@@ -140,8 +143,8 @@ class _MainPageState extends State<MainPage> {
         onTap: onBottomNavTapped,
         items: [
           BottomNavigationBarItem(
-              label: 'Home', icon: Icon(Icons.house_siding_outlined)),
-          BottomNavigationBarItem(label: 'VR', icon: Icon(Icons.threesixty)),
+              label: 'Home', icon: Icon(Icons.home)),
+          BottomNavigationBarItem(label: 'Discover', icon: Icon(Icons.video_collection)),
           BottomNavigationBarItem(label: 'Search', icon: Icon(Icons.search)),
           BottomNavigationBarItem(
               label: 'Plan', icon: Icon(Icons.assistant_outlined)),
