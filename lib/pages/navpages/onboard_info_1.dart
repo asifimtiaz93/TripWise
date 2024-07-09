@@ -1,12 +1,18 @@
-// onboard_info_fillup_1.dart
 import 'package:flutter/material.dart';
 import 'home_page.dart';
 import 'main_page.dart';
 import 'onboard_info_2.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-class OnboardInfoFillup1 extends StatelessWidget {
+class OnboardInfoFillup1 extends StatefulWidget {
   const OnboardInfoFillup1({super.key});
+
+  @override
+  _OnboardInfoFillup1State createState() => _OnboardInfoFillup1State();
+}
+
+class _OnboardInfoFillup1State extends State<OnboardInfoFillup1> {
+  final Set<String> _selectedPlaces = {};
 
   @override
   Widget build(BuildContext context) {
@@ -37,7 +43,6 @@ class OnboardInfoFillup1 extends StatelessWidget {
           ),
         ],
       ),
-
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
@@ -111,32 +116,60 @@ class OnboardInfoFillup1 extends StatelessWidget {
   }
 
   Widget _buildPlaceCard(String title, String imagePath) {
-    return Column(
-      children: [
-        Expanded(
-          child: Container(
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(16),
-              image: DecorationImage(
-                image: AssetImage(imagePath),
-                fit: BoxFit.cover,
+    bool isSelected = _selectedPlaces.contains(title);
+    return GestureDetector(
+      onTap: () {
+        setState(() {
+          if (isSelected) {
+            _selectedPlaces.remove(title);
+          } else {
+            _selectedPlaces.add(title);
+          }
+        });
+      },
+      child: Column(
+        children: [
+          Expanded(
+            child: Container(
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(16),
+                border: Border.all(
+                  color: isSelected ? Colors.blue : Colors.transparent,
+                  width: 3,
+                ),
+                image: DecorationImage(
+                  image: AssetImage(imagePath),
+                  fit: BoxFit.cover,
+                  colorFilter: isSelected
+                      ? ColorFilter.mode(Colors.blue.withOpacity(0.3), BlendMode.darken)
+                      : null,
+                ),
+              ),
+              child: isSelected
+                  ? Center(
+                child: Icon(
+                  Icons.check_circle,
+                  color: Colors.blue,
+                  size: 40,
+                ),
+              )
+                  : null,
+            ),
+          ),
+          SizedBox(height: 8),
+          Text(
+            title,
+            style: GoogleFonts.poppins(
+              textStyle: TextStyle(
+                fontSize: 14,
+                fontWeight: FontWeight.bold,
+                color: Colors.black,
               ),
             ),
+            textAlign: TextAlign.center,
           ),
-        ),
-        SizedBox(height: 8),
-        Text(
-          title,
-          style: GoogleFonts.poppins(
-            textStyle: TextStyle(
-              fontSize: 14,
-              fontWeight: FontWeight.bold,
-              color: Colors.black,
-            ),
-          ),
-          textAlign: TextAlign.center,
-        ),
-      ],
+        ],
+      ),
     );
   }
 }

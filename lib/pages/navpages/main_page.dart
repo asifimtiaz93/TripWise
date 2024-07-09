@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:tripwise/pages/navpages/home_page.dart';
 import 'package:tripwise/pages/navpages/plan_page.dart';
@@ -13,13 +14,23 @@ import 'package:tripwise/pages/navpages/onboard_info_3.dart';
 import 'package:tripwise/pages/navpages/onboard_info_2.dart';
 
 class MainPage extends StatefulWidget {
-  const MainPage({super.key});
+  final int initialIndex;
+  final User? user;
+  const MainPage({Key? key, this.initialIndex = 0, this.user}) : super(key: key);
 
   @override
   State<MainPage> createState() => _MainPageState();
 }
 
 class _MainPageState extends State<MainPage> {
+  late int selectedIndex;
+
+  @override
+  void initState() {
+    super.initState();
+    selectedIndex = widget.initialIndex;
+  }
+
   List<Widget> pages = [
     homePage(),
     vrPage(),
@@ -33,8 +44,6 @@ class _MainPageState extends State<MainPage> {
     SettingsPage(),
     OnboardInfoFillup2(),
     OnboardInfoFillup3(),
-
-
   ];
 
   // Map BottomNavigationBar indices to page indices
@@ -45,8 +54,6 @@ class _MainPageState extends State<MainPage> {
     3: 3, // Plan
     4: 4, // Profile
   };
-
-  int selectedIndex = 0;
 
   void onBottomNavTapped(int index) {
     setState(() {
@@ -65,9 +72,9 @@ class _MainPageState extends State<MainPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('TripWise',
-            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 28),
-
+        title: Text(
+          'TripWise',
+          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 28),
         ),
       ),
       drawer: Drawer(
@@ -124,7 +131,7 @@ class _MainPageState extends State<MainPage> {
             ListTile(
               leading: Icon(Icons.login),
               title: Text('Sign In'),
-              onTap: ()=>onDrawerTapped(7),
+              onTap: () => onDrawerTapped(7),
             ),
           ],
         ),
@@ -142,14 +149,11 @@ class _MainPageState extends State<MainPage> {
         showUnselectedLabels: true,
         onTap: onBottomNavTapped,
         items: [
-          BottomNavigationBarItem(
-              label: 'Home', icon: Icon(Icons.home)),
+          BottomNavigationBarItem(label: 'Home', icon: Icon(Icons.home)),
           BottomNavigationBarItem(label: 'Discover', icon: Icon(Icons.video_collection)),
           BottomNavigationBarItem(label: 'Search', icon: Icon(Icons.search)),
-          BottomNavigationBarItem(
-              label: 'Plan', icon: Icon(Icons.assistant_outlined)),
-          BottomNavigationBarItem(
-              label: 'Profile', icon: Icon(Icons.person_outline_outlined)),
+          BottomNavigationBarItem(label: 'Plan', icon: Icon(Icons.assistant_outlined)),
+          BottomNavigationBarItem(label: 'Profile', icon: Icon(Icons.person_outline_outlined)),
         ],
       ),
     );

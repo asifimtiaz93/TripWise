@@ -1,9 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:tripwise/pages/navpages/signup.dart';
-import 'package:tripwise/pages/navpages/home_page.dart';
-
-
+import 'package:tripwise/pages/navpages/main_page.dart';
 
 class SignInPage extends StatefulWidget {
   const SignInPage({super.key});
@@ -41,11 +39,11 @@ class _SignInPageState extends State<SignInPage> {
         password: _passwordController.text,
       );
 
-      // Navigate to home page after successful sign-in
+      // Navigate to MainPage with initialIndex 0 and pass the user
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(
-          builder: (context) => homePage(user: _user),
+          builder: (context) => MainPage(initialIndex: 0, user: _user),
         ),
       );
     } on FirebaseAuthException catch (e) {

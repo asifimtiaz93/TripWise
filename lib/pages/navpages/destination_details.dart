@@ -2,6 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'booking_page.dart';
+import 'main_page.dart';
 
 class DestinationDetailsPage extends StatelessWidget {
   final String title;
@@ -93,7 +94,7 @@ class DestinationDetailsPage extends StatelessWidget {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                              builder: (context) => BookingPage(),
+                              builder: (context) => MainPage(initialIndex: 6),
                             ),
                           );
                         },
@@ -139,15 +140,3 @@ class DestinationDetailsPage extends StatelessWidget {
   }
 }
 
-// Usage Example:
-void main() {
-  runApp(MaterialApp(
-    home: DestinationDetailsPage(
-      title: "Ratargul Swamp Forest",
-      location: "Gowainghat, Sylhet",
-      rating: 4.7,
-      imageUrl: "assets/Ratargul.jpg",
-      description: "Ratargul Swamp Forest is a freshwater swamp forest in Bangladesh and one of the few freshwater swamp forests in the world. You can never imagine how silence could be so enjoyable until you visit the amazing beauty.",
-    ),
-  ));
-}
