@@ -1,14 +1,49 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:tripwise/pages/navpages/popular_places.dart';
-
 import 'main_page.dart';
 
-class homePage extends StatelessWidget {
+class homePage extends StatefulWidget {
   final User? user;
 
   const homePage({Key? key, this.user}) : super(key: key);
+
+  @override
+  _homePageState createState() => _homePageState();
+}
+
+class _homePageState extends State<homePage> {
+  String userName = '';
+
+  @override
+  void initState() {
+    super.initState();
+    _fetchUserName();
+  }
+
+  Future<void> _fetchUserName() async {
+    if (widget.user != null) {
+      DocumentSnapshot userDoc = await FirebaseFirestore.instance.collection('User').doc(widget.user!.uid).get();
+      if (userDoc.exists) {
+        Map<String, dynamic>? userData = userDoc.data() as Map<String, dynamic>?;
+        if (userData != null) {
+          setState(() {
+            userName = userData['Name'] ?? 'Guest';
+          });
+        }
+      } else {
+        setState(() {
+          userName = widget.user?.displayName ?? 'Guest';
+        });
+      }
+    } else {
+      setState(() {
+        userName = 'Guest';
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -19,7 +54,6 @@ class homePage extends StatelessWidget {
           style: TextStyle(fontWeight: FontWeight.bold, fontSize: 28),
         ),
       ),
-
       backgroundColor: Colors.white,
       body: SingleChildScrollView(
         child: Padding(
@@ -30,7 +64,7 @@ class homePage extends StatelessWidget {
               Row(
                 children: [
                   Text(
-          user != null ? user!.email ?? 'No email' : 'User',
+                    userName,
                     style: GoogleFonts.pacifico(
                       textStyle: TextStyle(
                         fontSize: 24,
@@ -158,7 +192,7 @@ class homePage extends StatelessWidget {
       onTap: () {
         Navigator.push(
           context,
-          MaterialPageRoute(builder: (context) =>  MainPage(initialIndex: 5)),
+          MaterialPageRoute(builder: (context) => MainPage(initialIndex: 5)),
         );
       },
       child: Container(

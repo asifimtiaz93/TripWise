@@ -5,7 +5,7 @@ import 'onboard_info_2.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class OnboardInfoFillup1 extends StatefulWidget {
-  const OnboardInfoFillup1({super.key});
+  const OnboardInfoFillup1({Key? key}) : super(key: key);
 
   @override
   _OnboardInfoFillup1State createState() => _OnboardInfoFillup1State();
@@ -32,7 +32,7 @@ class _OnboardInfoFillup1State extends State<OnboardInfoFillup1> {
             onPressed: () {
               Navigator.pushAndRemoveUntil(
                 context,
-                MaterialPageRoute(builder: (context) => MainPage()), // Replace HomePage with your home page widget
+                MaterialPageRoute(builder: (context) => MainPage()),
                     (Route<dynamic> route) => false,
               );
             },
@@ -95,15 +95,19 @@ class _OnboardInfoFillup1State extends State<OnboardInfoFillup1> {
             Center(
               child: ElevatedButton(
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.black, // background (button) color
-                  foregroundColor: Colors.white, // foreground (text) color
+                  backgroundColor: Colors.black,
+                  foregroundColor: Colors.white,
                   padding: EdgeInsets.symmetric(horizontal: 50, vertical: 15),
                   textStyle: TextStyle(fontSize: 16),
                 ),
                 onPressed: () {
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => const OnboardInfoFillup2()),
+                    MaterialPageRoute(
+                      builder: (context) => OnboardInfoFillup2(
+                        selectedPlaces: _selectedPlaces,
+                      ),
+                    ),
                   );
                 },
                 child: Text('Next'),

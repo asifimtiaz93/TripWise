@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'onboard_info_3.dart';
-import 'main_page.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class OnboardInfoFillup2 extends StatelessWidget {
-  const OnboardInfoFillup2({super.key});
+  final Set<String> selectedPlaces;
+
+  const OnboardInfoFillup2({Key? key, required this.selectedPlaces}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -75,7 +76,12 @@ class OnboardInfoFillup2 extends StatelessWidget {
       onTap: () {
         Navigator.push(
           context,
-          MaterialPageRoute(builder: (context) => const OnboardInfoFillup3()),
+          MaterialPageRoute(
+            builder: (context) => OnboardInfoFillup3(
+              selectedPlaces: selectedPlaces,
+              relationshipStatus: title,
+            ),
+          ),
         );
       },
       child: Column(

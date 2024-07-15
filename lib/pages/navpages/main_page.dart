@@ -25,28 +25,30 @@ class MainPage extends StatefulWidget {
 class _MainPageState extends State<MainPage> {
   late int selectedIndex;
 
+  final Set<String> selectedPlaces = {};
+  String relationshipStatus = '';
+
   @override
   void initState() {
     super.initState();
     selectedIndex = widget.initialIndex;
   }
 
-  List<Widget> pages = [
-    homePage(),
+  late List<Widget> pages = [
+    homePage(user: widget.user),
     vrPage(),
     SearchPage(),
     planPage(),
-    profilePage(),
+    profilePage(user: widget.user),
     PopularPlacesPage(),
     BookingPage(),
     SignInPage(),
     OnboardInfoFillup1(),
     SettingsPage(),
-    OnboardInfoFillup2(),
-    OnboardInfoFillup3(),
+    OnboardInfoFillup2(selectedPlaces: selectedPlaces),
+    OnboardInfoFillup3(selectedPlaces: selectedPlaces, relationshipStatus: relationshipStatus),
   ];
 
-  // Map BottomNavigationBar indices to page indices
   final Map<int, int> bottomNavBarPageMapping = {
     0: 0, // Home
     1: 1, // VR
@@ -71,9 +73,7 @@ class _MainPageState extends State<MainPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-
-      ),
+      appBar: AppBar(),
       drawer: Drawer(
         child: ListView(
           padding: EdgeInsets.zero,

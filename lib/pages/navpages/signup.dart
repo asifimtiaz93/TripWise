@@ -1,5 +1,6 @@
-import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/material.dart';
 
 class SignUpPage extends StatefulWidget {
   const SignUpPage({super.key});
@@ -23,15 +24,29 @@ class _SignUpPageState extends State<SignUpPage> {
       });
 
       try {
-        await _auth.createUserWithEmailAndPassword(
+        UserCredential userCredential = await _auth.createUserWithEmailAndPassword(
           email: _emailController.text,
           password: _passwordController.text,
         );
 
-        // Navigate to the sign-in page or home page after successful sign-up
+        User? user = userCredential.user;
+
+        await user!.updateDisplayName(_nameController.text);
+
+        // Create a document for the user in Firestore
+        await FirebaseFirestore.instance.collection('User').doc(user.uid).set({
+          'UserID': user.uid,
+          'Name': _nameController.text,
+          'Email': _emailController.text,
+          'Password': _passwordController.text, // Note: Storing plaintext passwords is not recommended
+          'ProfilePicture': user.photoURL ?? '',
+          'RewardPoints': 0,
+          'TravelTrips': 0,
+          'BucketList': 0,
+        });
+
         Navigator.pop(context);
       } on FirebaseAuthException catch (e) {
-        // Show error message
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text(e.message ?? 'Sign up failed'),
@@ -187,8 +202,6 @@ class _SignUpPageState extends State<SignUpPage> {
                   ],
                 ),
               ),
-
-
             ],
           ),
         ),

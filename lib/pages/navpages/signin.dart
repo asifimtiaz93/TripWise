@@ -1,7 +1,9 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:tripwise/pages/navpages/signup.dart';
 import 'package:tripwise/pages/navpages/main_page.dart';
+import '../../services/auth_services.dart';
 
 class SignInPage extends StatefulWidget {
   const SignInPage({super.key});
@@ -12,6 +14,7 @@ class SignInPage extends StatefulWidget {
 
 class _SignInPageState extends State<SignInPage> {
   final FirebaseAuth _auth = FirebaseAuth.instance;
+  final GoogleSignIn _googleSignIn = GoogleSignIn();
 
   User? _user;
   final _emailController = TextEditingController();
@@ -43,7 +46,7 @@ class _SignInPageState extends State<SignInPage> {
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(
-          builder: (context) => MainPage(initialIndex: 0, user: _user),
+          builder: (context) => MainPage(initialIndex: 0, user: _auth.currentUser),
         ),
       );
     } on FirebaseAuthException catch (e) {
@@ -51,6 +54,44 @@ class _SignInPageState extends State<SignInPage> {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text(e.message ?? 'Sign in failed'),
+        ),
+      );
+    }
+
+    setState(() {
+      _isLoading = false;
+    });
+  }
+
+  Future<void> _handleGoogleSignIn() async {
+    setState(() {
+      _isLoading = true;
+    });
+
+    try {
+      User? user = await AuthService().signInWithGoogle(context);
+      if (user != null) {
+        print('User signed in: ${user.email}');
+        // Navigate to MainPage with initialIndex 0 and pass the user
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+            builder: (context) => MainPage(initialIndex: 0, user: user),
+          ),
+        );
+      } else {
+        print('Google sign-in cancelled or failed');
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Google sign-in cancelled or failed'),
+          ),
+        );
+      }
+    } catch (e) {
+      print('Sign in with Google failed: $e');
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Sign in with Google failed: $e'),
         ),
       );
     }
@@ -75,7 +116,7 @@ class _SignInPageState extends State<SignInPage> {
         ),
       ),
       body: Padding(
-        padding: const EdgeInsets.all(2.0),
+        padding: const EdgeInsets.all(16.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -88,7 +129,7 @@ class _SignInPageState extends State<SignInPage> {
                 ),
               ),
             ),
-            SizedBox(height: 1),
+            SizedBox(height: 20),
             Center(
               child: Text(
                 'Please sign in to continue our app',
@@ -134,7 +175,7 @@ class _SignInPageState extends State<SignInPage> {
                 ),
               ),
             ),
-            SizedBox(height: 2),
+            SizedBox(height: 20),
             Center(
               child: SizedBox(
                 width: 250,
@@ -154,7 +195,7 @@ class _SignInPageState extends State<SignInPage> {
                 ),
               ),
             ),
-            SizedBox(height: 2),
+            SizedBox(height: 20),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
@@ -173,7 +214,7 @@ class _SignInPageState extends State<SignInPage> {
                 ),
               ],
             ),
-            SizedBox(height: 1),
+            SizedBox(height: 20),
             Center(
               child: Text(
                 'Or connect',
@@ -185,14 +226,17 @@ class _SignInPageState extends State<SignInPage> {
               width: double.infinity,
               child: Column(
                 children: [
-                  OutlinedButton.icon(
-                    icon: Image.asset('assets/google.png', width: 20, height: 20), // Replace with your own image asset
-                    label: Text('Sign in with Google'),
-                    onPressed: _handleGoogleSignIn,
-                    style: OutlinedButton.styleFrom(
-                      padding: EdgeInsets.symmetric(vertical: 15, horizontal: 10),
-                      textStyle: TextStyle(fontSize: 16),
-                      foregroundColor: Colors.black,
+                  GestureDetector(
+                    onTap: _isLoading ? null : _handleGoogleSignIn,
+                    child: OutlinedButton.icon(
+                      icon: Image.asset('assets/google.png', width: 20, height: 20),
+                      label: Text('Sign in with Google'),
+                      onPressed: null, // Disable the default onPressed
+                      style: OutlinedButton.styleFrom(
+                        padding: EdgeInsets.symmetric(vertical: 15, horizontal: 10),
+                        textStyle: TextStyle(fontSize: 16),
+                        foregroundColor: Colors.black,
+                      ),
                     ),
                   ),
                 ],
@@ -202,27 +246,5 @@ class _SignInPageState extends State<SignInPage> {
         ),
       ),
     );
-  }
-
-  Widget _userInfo() {
-    return Container(
-      width: 100, // specify the width
-      height: 100, // specify the height
-      decoration: BoxDecoration(
-        image: DecorationImage(
-          image: NetworkImage(_user!.photoURL!),
-          fit: BoxFit.cover, // optional: specify how the image should fit
-        ),
-      ),
-    );
-  }
-
-  void _handleGoogleSignIn() {
-    try {
-      GoogleAuthProvider _googleAuthProvider = GoogleAuthProvider();
-      _auth.signInWithProvider(_googleAuthProvider);
-    } catch (error) {
-      print(error);
-    }
   }
 }
