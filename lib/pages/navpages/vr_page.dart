@@ -1,12 +1,7 @@
 // lib/pages/navpages/vr_page.dart
 
 import 'package:flutter/material.dart';
-<<<<<<< Updated upstream
-import 'package:video_player/video_player.dart';
-=======
 import 'package:youtube_player_flutter/youtube_player_flutter.dart';
-import 'package:google_fonts/google_fonts.dart';
->>>>>>> Stashed changes
 
 class vrPage extends StatefulWidget {
   const vrPage({super.key});
@@ -23,13 +18,13 @@ class _vrPageState extends State<vrPage> {
     return Scaffold(
       appBar: AppBar(
         title: const Text(
-          "Explore Bangladesh in VR",
+          "Discover Bangladesh",
           style: TextStyle(
             color: Colors.white,
             fontWeight: FontWeight.bold,
           ),
         ),
-        backgroundColor: Colors.green[900],
+        backgroundColor: Colors.black,
       ),
       body: CustomScrollView(
         slivers: [
@@ -73,28 +68,19 @@ class _vrPageState extends State<vrPage> {
                           },
                         ),
                       ),
-                      SizedBox(height: 16),
+                      SizedBox(height: 10),
                       Text(
-                        "Explore Beautiful Bangladesh",
-                        style: GoogleFonts.pacifico(
-                          textStyle: TextStyle(
-                            fontSize: 24,
-                            fontWeight: FontWeight.bold,
-                          ),
+                        "360 Videos",
+                        style: TextStyle(
+                          fontSize: 24,
+                          fontWeight: FontWeight.bold,
                         ),
                       ),
-                      SizedBox(height: 16),
-                      Container(
-                        height: 200,
-                        child: ListView(
-                          scrollDirection: Axis.horizontal,
-                          children: [
-                            tourVideoCard(context, 'assets/videos/beach_cox.mp4', 'Shugondha Beach'),
-                            tourVideoCard(context, 'assets/videos/kaptai.mp4', 'Kaptai'),
-                          ],
-                        ),
-                      ),
-                      SizedBox(height: 16),
+                      SizedBox(height: 10),
+                      tourVideoCard(context, '-758gHCMn0M', 'Shugondha Beach'),
+                      SizedBox(height: 10),
+                      tourVideoCard(context, 'mH4tCp0utH4', 'Kaptai'),
+                      SizedBox(height: 10),
                       Text(
                         "Tour Videos",
                         style: TextStyle(
@@ -102,16 +88,10 @@ class _vrPageState extends State<vrPage> {
                           fontWeight: FontWeight.bold,
                         ),
                       ),
-                      SizedBox(height: 16),
-                      Container(
-                        height: 200,
-                        child: ListView(
-                          scrollDirection: Axis.horizontal,
-                          children: [
-                            tourVideoCard(context, 'assets/videos/nature_bd.mp4', 'Into the Nature'),
-                          ],
-                        ),
-                      ),
+                      SizedBox(height: 10),
+                      tourVideoCard(context, 'sffrf1ZvtlM', 'Into the Nature'),
+                      SizedBox(height: 10),
+                      tourVideoCard(context, 'tbvK3nac8to', 'Puran Dhaka'),
                     ],
                   ),
                 ),
@@ -123,35 +103,32 @@ class _vrPageState extends State<vrPage> {
     );
   }
 
-<<<<<<< Updated upstream
-  Widget tourVideoCard(BuildContext context, String videoUrl, String title) {
-=======
   static const List<String> _chipLabels = [
     'Cox\'s Bazar',
     'Sylhet',
     'Chattogram',
+    'Rangpur',
   ];
 
   Widget tourVideoCard(BuildContext context, String videoId, String title) {
->>>>>>> Stashed changes
     return GestureDetector(
       onTap: () {
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) => FullScreenVideoPlayer(videoUrl: videoUrl, title: title),
+            builder: (context) => FullScreenVideoPlayer(videoId: videoId, title: title),
           ),
         );
       },
       child: Container(
-        width: 160,
-        margin: EdgeInsets.only(right: 16),
+        width: double.infinity,
+        margin: EdgeInsets.only(bottom: 16),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             ClipRRect(
               borderRadius: BorderRadius.circular(12),
-              child: TourVideoPlayer(videoUrl: videoUrl),
+              child: TourVideoPlayer(videoId: videoId),
             ),
             SizedBox(height: 8),
             Text(
@@ -176,26 +153,27 @@ class _vrPageState extends State<vrPage> {
 }
 
 class TourVideoPlayer extends StatefulWidget {
-  final String videoUrl;
+  final String videoId;
 
-  const TourVideoPlayer({Key? key, required this.videoUrl}) : super(key: key);
+  const TourVideoPlayer({Key? key, required this.videoId}) : super(key: key);
 
   @override
   _TourVideoPlayerState createState() => _TourVideoPlayerState();
 }
 
 class _TourVideoPlayerState extends State<TourVideoPlayer> {
-  late VideoPlayerController _controller;
-  bool _isPlaying = false;
-  bool _isFullScreen = false;
+  late YoutubePlayerController _controller;
 
   @override
   void initState() {
     super.initState();
-    _controller = VideoPlayerController.asset(widget.videoUrl)
-      ..initialize().then((_) {
-        setState(() {});
-      });
+    _controller = YoutubePlayerController(
+      initialVideoId: widget.videoId,
+      flags: YoutubePlayerFlags(
+        autoPlay: false,
+        mute: false,
+      ),
+    );
   }
 
   @override
@@ -204,113 +182,21 @@ class _TourVideoPlayerState extends State<TourVideoPlayer> {
     super.dispose();
   }
 
-  void _togglePlayPause() {
-    setState(() {
-      if (_controller.value.isPlaying) {
-        _controller.pause();
-        _isPlaying = false;
-      } else {
-        _controller.play();
-        _isPlaying = true;
-      }
-    });
-  }
-
-  void _toggleFullScreen(BuildContext context) {
-    setState(() {
-      _isFullScreen = !_isFullScreen;
-    });
-    if (_isFullScreen) {
-      Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (context) => Scaffold(
-            body: Center(
-              child: AspectRatio(
-                aspectRatio: _controller.value.aspectRatio,
-                child: VideoPlayer(_controller),
-              ),
-            ),
-            floatingActionButton: FloatingActionButton(
-              onPressed: () {
-                Navigator.pop(context);
-              },
-              child: Icon(Icons.fullscreen_exit),
-            ),
-          ),
-        ),
-      ).then((_) => setState(() {
-        _isFullScreen = false;
-      }));
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        GestureDetector(
-          onTap: _togglePlayPause,
-          child: _controller.value.isInitialized
-              ? Stack(
-            alignment: Alignment.center,
-            children: [
-              AspectRatio(
-                aspectRatio: _controller.value.aspectRatio,
-                child: VideoPlayer(_controller),
-              ),
-              if (!_isPlaying)
-                Icon(
-                  Icons.play_arrow,
-                  size: 64,
-                  color: Colors.white,
-                ),
-            ],
-          )
-              : Container(
-            height: 120,
-            color: Colors.black,
-            child: Center(
-              child: CircularProgressIndicator(),
-            ),
-          ),
-        ),
-        VideoProgressIndicator(
-          _controller,
-          allowScrubbing: true,
-          colors: VideoProgressColors(
-            playedColor: Colors.red,
-            bufferedColor: Colors.grey,
-            backgroundColor: Colors.black,
-          ),
-        ),
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 8.0),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              IconButton(
-                icon: Icon(_controller.value.isPlaying ? Icons.pause : Icons.play_arrow),
-                onPressed: _togglePlayPause,
-              ),
-              IconButton(
-                icon: Icon(_isFullScreen ? Icons.fullscreen_exit : Icons.fullscreen),
-                onPressed: () => _toggleFullScreen(context),
-              ),
-            ],
-          ),
-        ),
-      ],
+    return YoutubePlayer(
+      controller: _controller,
+      showVideoProgressIndicator: true,
+      progressIndicatorColor: Colors.red,
     );
   }
 }
 
 class FullScreenVideoPlayer extends StatelessWidget {
-  final String videoUrl;
+  final String videoId;
   final String title;
 
-  const FullScreenVideoPlayer({Key? key, required this.videoUrl, required this.title}) : super(key: key);
+  const FullScreenVideoPlayer({Key? key, required this.videoId, required this.title}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -320,14 +206,18 @@ class FullScreenVideoPlayer extends StatelessWidget {
         backgroundColor: Colors.blueAccent,
       ),
       body: Center(
-        child: TourVideoPlayer(videoUrl: videoUrl),
+        child: YoutubePlayer(
+          controller: YoutubePlayerController(
+            initialVideoId: videoId,
+            flags: YoutubePlayerFlags(
+              autoPlay: true,
+              mute: false,
+            ),
+          ),
+          showVideoProgressIndicator: true,
+          progressIndicatorColor: Colors.red,
+        ),
       ),
     );
   }
-}
-
-void main() {
-  runApp(MaterialApp(
-    home: vrPage(),
-  ));
 }
