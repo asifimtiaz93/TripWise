@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:tripwise/pages/navpages/preference_page.dart';
 import 'package:tripwise/pages/navpages/profile_page_edit.dart';
 import 'package:tripwise/pages/navpages/settings_page.dart';
 
@@ -138,7 +139,10 @@ class profilePage extends StatelessWidget {
                   leading: Icon(Icons.settings),
                   title: Text('Preferences'),
                   onTap: () {
-                    // Implement navigation to preferences page
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => PreferencesPage()),
+                    );
                   },
                 ),
                 ListTile(

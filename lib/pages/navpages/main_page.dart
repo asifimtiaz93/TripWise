@@ -13,6 +13,8 @@ import 'package:tripwise/pages/navpages/settings_page.dart';
 import 'package:tripwise/pages/navpages/onboard_info_3.dart';
 import 'package:tripwise/pages/navpages/onboard_info_2.dart';
 
+import 'admin_page.dart';
+
 class MainPage extends StatefulWidget {
   final int initialIndex;
   final User? user;
@@ -43,6 +45,7 @@ class _MainPageState extends State<MainPage> {
     PopularPlacesPage(),
     BookingPage(),
     SignInPage(),
+    AdminPage(),
     OnboardInfoFillup1(),
     SettingsPage(),
     OnboardInfoFillup2(selectedPlaces: selectedPlaces),
@@ -130,7 +133,13 @@ class _MainPageState extends State<MainPage> {
               title: Text('Sign In'),
               onTap: () => onDrawerTapped(7),
             ),
+            ListTile(
+              leading: Icon(Icons.admin_panel_settings_sharp),
+              title: Text('Admin'),
+              onTap: () => onDrawerTapped(8),
+            ),
           ],
+
         ),
       ),
       body: pages[selectedIndex],

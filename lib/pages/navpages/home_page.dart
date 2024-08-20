@@ -153,25 +153,44 @@ class _homePageState extends State<homePage> {
               SizedBox(height: 10),
               SizedBox(
                 height: 250,
-                child: ListView(
-                  scrollDirection: Axis.horizontal,
-                  children: [
-                    _buildDestinationCard(
-                      context,
-                      image: 'assets/sylhet.jpg', // Replace with your image paths
-                      title: 'Sylhet',
-                      location: 'Sylhet City, Sylhet',
-                      rating: 4.7,
-                    ),
-                    _buildDestinationCard(
-                      context,
-                      image: 'assets/bandarban.jpeg', // Replace with your image paths
-                      title: 'Bandarban',
-                      location: 'Chittagong',
-                      rating: 4.8,
-                    ),
-                    // Add more destination cards as needed
-                  ],
+                child: StreamBuilder<QuerySnapshot>(
+                  stream: FirebaseFirestore.instance.collection('Destination').snapshots(),
+                  builder: (context, snapshot) {
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return Center(child: CircularProgressIndicator());
+                    }
+
+                    if (snapshot.hasError) {
+                      print('Error: ${snapshot.error}');
+                      return Center(child: Text('Error: ${snapshot.error}'));
+                    }
+
+                    if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
+                      print('No destinations found.');
+                      return Center(child: Text('No destinations found.'));
+                    }
+
+                    print("Total destinations found: ${snapshot.data!.docs.length}");
+
+                    return ListView(
+                      scrollDirection: Axis.horizontal,
+                      children: snapshot.data!.docs.map((doc) {
+                        Map<String, dynamic> data = doc.data() as Map<String, dynamic>;
+                        if (data.isEmpty) {
+                          print("Empty data for doc: ${doc.id}");
+                          return SizedBox.shrink();
+                        }
+                        print("Destination data: $data");
+                        return _buildDestinationCard(
+                          context,
+                          image: data['ImageURL'], // Updated field name
+                          title: data['Name'], // Updated field name
+                          location: data['Location'], // Updated field name
+                          rating: (data['Rating'] as num).toDouble(), // Updated field name
+                        );
+                      }).toList(),
+                    );
+                  },
                 ),
               ),
             ],
@@ -201,7 +220,7 @@ class _homePageState extends State<homePage> {
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(16),
           image: DecorationImage(
-            image: AssetImage(image),
+            image: NetworkImage(image), // Use NetworkImage to load image from URL
             fit: BoxFit.cover,
           ),
         ),

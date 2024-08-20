@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:cloud_firestore/cloud_firestore.dart'; // Import Firestore
-
-import 'main_page.dart';
+import '/services/database_helper.dart';
+import 'main_page.dart'; // Import the database helper
 
 class OnboardInfoFillup3 extends StatefulWidget {
   final Set<String> selectedPlaces;
@@ -16,33 +15,29 @@ class OnboardInfoFillup3 extends StatefulWidget {
 
 class _OnboardInfoFillup3State extends State<OnboardInfoFillup3> {
   final TextEditingController _budgetController = TextEditingController();
+  final DatabaseHelper dbHelper = DatabaseHelper();
 
-  void _savePreferences() {
-    // Assuming you have the user's ID available from Firebase Auth or elsewhere
-    String userId = 'user321'; // Replace with actual user ID
+  void _savePreferencesLocally() async {
+    try {
+      await dbHelper.insertPreference('Mountains', widget.selectedPlaces.contains('Mountains').toString());
+      await dbHelper.insertPreference('Beaches', widget.selectedPlaces.contains('Beaches').toString());
+      await dbHelper.insertPreference('CulturalSites', widget.selectedPlaces.contains('Cultural Sites').toString());
+      await dbHelper.insertPreference('AdventureSports', widget.selectedPlaces.contains('Adventure Sports').toString());
+      await dbHelper.insertPreference('Cities', widget.selectedPlaces.contains('Cities').toString());
+      await dbHelper.insertPreference('HistoricalPlaces', widget.selectedPlaces.contains('Historical Places').toString());
+      await dbHelper.insertPreference('RelationshipStatus', widget.relationshipStatus);
+      await dbHelper.insertPreference('TravelBudget', _budgetController.text);
 
-    // Create a new document in the Preferences collection with user preferences
-    FirebaseFirestore.instance.collection('Preferences').doc(userId).set({
-      'UserID': userId,
-      'Mountains': widget.selectedPlaces.contains('Mountains'),
-      'Beaches': widget.selectedPlaces.contains('Beaches'),
-      'Cultural Sites': widget.selectedPlaces.contains('Cultural Sites'),
-      'Adventure Sports': widget.selectedPlaces.contains('Adventure Spots'),
-      'Cities': widget.selectedPlaces.contains('Cities'),
-      'Historical Places': widget.selectedPlaces.contains('Historical Places'),
-      'RelationshipStatus': widget.relationshipStatus,
-      'TravelBudget': _budgetController.text,
-    }).then((value) {
       // Navigate to main page or perform additional actions
       Navigator.pushAndRemoveUntil(
         context,
         MaterialPageRoute(builder: (context) => MainPage()),
             (Route<dynamic> route) => false,
       );
-    }).catchError((error) {
-      print("Failed to create preferences: $error");
+    } catch (error) {
+      print("Failed to save preferences: $error");
       // Handle error as needed
-    });
+    }
   }
 
   @override
@@ -108,7 +103,7 @@ class _OnboardInfoFillup3State extends State<OnboardInfoFillup3> {
                   padding: EdgeInsets.symmetric(horizontal: 50, vertical: 15),
                   textStyle: TextStyle(fontSize: 16),
                 ),
-                onPressed: _savePreferences, // Save user preferences
+                onPressed: _savePreferencesLocally, // Save preferences locally
                 child: Text('Save'),
               ),
             ),

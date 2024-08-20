@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import '/services/database_helper.dart'; // Import the database helper
 
 class SignUpPage extends StatefulWidget {
   const SignUpPage({super.key});
@@ -15,6 +16,7 @@ class _SignUpPageState extends State<SignUpPage> {
   final _nameController = TextEditingController();
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
+  final DatabaseHelper dbHelper = DatabaseHelper(); // Initialize the database helper
   bool _isLoading = false;
 
   void _signUp() async {
@@ -33,6 +35,9 @@ class _SignUpPageState extends State<SignUpPage> {
 
         await user!.updateDisplayName(_nameController.text);
 
+        // Fetch local preferences from SQLite
+        Map<String, String> preferences = await dbHelper.getPreferences();
+
         // Create a document for the user in Firestore
         await FirebaseFirestore.instance.collection('User').doc(user.uid).set({
           'UserID': user.uid,
@@ -43,7 +48,18 @@ class _SignUpPageState extends State<SignUpPage> {
           'RewardPoints': 0,
           'TravelTrips': 0,
           'BucketList': 0,
+          'Mountains': preferences['Mountains'] == 'true',
+          'Beaches': preferences['Beaches'] == 'true',
+          'CulturalSites': preferences['CulturalSites'] == 'true',
+          'AdventureSports': preferences['AdventureSports'] == 'true',
+          'Cities': preferences['Cities'] == 'true',
+          'HistoricalPlaces': preferences['HistoricalPlaces'] == 'true',
+          'RelationshipStatus': preferences['RelationshipStatus'] ?? '',
+          'TravelBudget': preferences['TravelBudget'] ?? '',
         });
+
+        // Clear local preferences after saving to Firestore
+        await dbHelper.clearPreferences();
 
         Navigator.pop(context);
       } on FirebaseAuthException catch (e) {
