@@ -185,6 +185,14 @@ class _MainPageState extends State<MainPage> {
               leading: const Icon(Icons.admin_panel_settings_sharp),
               title: const Text('Admin'),
               onTap: () => onDrawerTapped(8),
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
+            ),
+            ListTile(
+              leading: Icon(Icons.admin_panel_settings_sharp),
+              title: Text('Booking History'),
+              onTap: () => onDrawerTapped(13),
 >>>>>>> Stashed changes
             ),
           ],

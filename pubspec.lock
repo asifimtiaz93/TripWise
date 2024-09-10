@@ -7,10 +7,17 @@ packages:
     description:
       name: _flutterfire_internals
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
       sha256: a315d1c444402c3fa468de626d33a1c666041c87e9e195e8fb355b7084aefcc1
       url: "https://pub.dev"
     source: hosted
     version: "1.3.38"
+=======
+      sha256: "9371d13b8ee442e3bfc08a24e3a1b3742c839abbfaf5eef11b79c4b862c89bf7"
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.3.41"
+>>>>>>> Stashed changes
   args:
     dependency: transitive
     description:
@@ -40,10 +47,17 @@ packages:
     dependency: "direct main"
     description:
       name: awesome_snackbar_content
+<<<<<<< Updated upstream
       sha256: dc63adf86eadb0a4e9e1d9994c3fe09a7b0552076e87152fc292705ec506c80e
       url: "https://pub.dev"
     source: hosted
     version: "0.1.1"
+>>>>>>> Stashed changes
+=======
+      sha256: a99f229d5e9404c69d172d9a6256961743eb9bc68b0a7905185eacd206b27984
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.1.4"
 >>>>>>> Stashed changes
   boolean_selector:
     dependency: transitive
@@ -95,6 +109,9 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "4.2.0"
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
   collection:
     dependency: transitive
@@ -114,6 +131,9 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "0.3.4+2"
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
   crypto:
     dependency: transitive
@@ -155,8 +175,11 @@ packages:
       url: "https://pub.dev"
     source: hosted
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
     version: "2.1.2"
 =======
+=======
+>>>>>>> Stashed changes
     version: "2.1.3"
   file:
     dependency: transitive
@@ -198,11 +221,15 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "0.9.3+2"
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
   firebase_auth:
     dependency: "direct main"
     description:
       name: firebase_auth
+<<<<<<< Updated upstream
 <<<<<<< Updated upstream
       sha256: a41b56878fa6aef3ea52962329b47eee333672d4b0ecc406e071b9fc729f242c
       url: "https://pub.dev"
@@ -214,10 +241,17 @@ packages:
     source: hosted
     version: "5.2.0"
 >>>>>>> Stashed changes
+=======
+      sha256: "6f5792bdc208416bfdfbfe3363b78ce01667b6ebc4c5cb47cfa891f2fca45ab7"
+      url: "https://pub.dev"
+    source: hosted
+    version: "5.2.0"
+>>>>>>> Stashed changes
   firebase_auth_platform_interface:
     dependency: transitive
     description:
       name: firebase_auth_platform_interface
+<<<<<<< Updated upstream
 <<<<<<< Updated upstream
       sha256: d1c68097588f3b75ef79a22102ff96c311735c254353bccf6824d19f1a7e86b9
       url: "https://pub.dev"
@@ -229,10 +263,17 @@ packages:
     source: hosted
     version: "7.4.4"
 >>>>>>> Stashed changes
+=======
+      sha256: "80237bb8a92bb0a5e3b40de1c8dbc80254e49ac9e3907b4b47b8e95ac3dd3fad"
+      url: "https://pub.dev"
+    source: hosted
+    version: "7.4.4"
+>>>>>>> Stashed changes
   firebase_auth_web:
     dependency: transitive
     description:
       name: firebase_auth_web
+<<<<<<< Updated upstream
 <<<<<<< Updated upstream
       sha256: e66ec0ae5697ee39ccd4865d6887cb0df220dd4ea0b21404910c68ca4c1a731a
       url: "https://pub.dev"
@@ -244,15 +285,28 @@ packages:
     source: hosted
     version: "5.12.6"
 >>>>>>> Stashed changes
+=======
+      sha256: "9d315491a6be65ea83511cb0e078544a309c39dd54c0ee355c51dbd6d8c03cc8"
+      url: "https://pub.dev"
+    source: hosted
+    version: "5.12.6"
+>>>>>>> Stashed changes
   firebase_core:
     dependency: "direct main"
     description:
       name: firebase_core
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
       sha256: "1e06b0538ab3108a61d895ee16951670b491c4a94fce8f2d30e5de7a5eca4b28"
       url: "https://pub.dev"
     source: hosted
     version: "3.1.1"
+=======
+      sha256: "06537da27db981947fa535bb91ca120b4e9cb59cb87278dbdde718558cafc9ff"
+      url: "https://pub.dev"
+    source: hosted
+    version: "3.4.0"
+>>>>>>> Stashed changes
 =======
       sha256: "06537da27db981947fa535bb91ca120b4e9cb59cb87278dbdde718558cafc9ff"
       url: "https://pub.dev"
@@ -272,6 +326,7 @@ packages:
     description:
       name: firebase_core_web
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
       sha256: "6643fe3dbd021e6ccfb751f7882b39df355708afbdeb4130fc50f9305a9d1a3d"
       url: "https://pub.dev"
     source: hosted
@@ -280,6 +335,11 @@ packages:
       sha256: "362e52457ed2b7b180964769c1e04d1e0ea0259fdf7025fdfedd019d4ae2bd88"
       url: "https://pub.dev"
     source: hosted
+=======
+      sha256: "362e52457ed2b7b180964769c1e04d1e0ea0259fdf7025fdfedd019d4ae2bd88"
+      url: "https://pub.dev"
+    source: hosted
+>>>>>>> Stashed changes
     version: "2.17.5"
   firebase_storage:
     dependency: "direct main"
@@ -341,10 +401,17 @@ packages:
     description:
       name: flutter_plugin_android_lifecycle
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
       sha256: c6b0b4c05c458e1c01ad9bcc14041dd7b1f6783d487be4386f793f47a8a4d03e
       url: "https://pub.dev"
     source: hosted
     version: "2.0.20"
+=======
+      sha256: "9ee02950848f61c4129af3d6ec84a1cfc0e47931abc746b03e7a3bc3e8ff6eda"
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.0.22"
+>>>>>>> Stashed changes
 =======
       sha256: "9ee02950848f61c4129af3d6ec84a1cfc0e47931abc746b03e7a3bc3e8ff6eda"
       url: "https://pub.dev"
@@ -411,10 +478,17 @@ packages:
     description:
       name: google_sign_in_android
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
       sha256: d30fb34b659679ea74397e9748b4ab5d720720d57dcc79538f1b3c4a68654cb3
       url: "https://pub.dev"
     source: hosted
     version: "6.1.27"
+=======
+      sha256: "0608de03fc541ece4f91ba3e01a68b17cce7a6cf42bd59e40bbe5c55cc3a49d8"
+      url: "https://pub.dev"
+    source: hosted
+    version: "6.1.30"
+>>>>>>> Stashed changes
 =======
       sha256: "0608de03fc541ece4f91ba3e01a68b17cce7a6cf42bd59e40bbe5c55cc3a49d8"
       url: "https://pub.dev"
@@ -483,10 +557,17 @@ packages:
     description:
       name: image_picker_android
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
       sha256: ff39a10ab4f48f4ac70776d0494a97bf073cd2570892cd46bc8a5cac162c25db
       url: "https://pub.dev"
     source: hosted
     version: "0.8.12+4"
+=======
+      sha256: "8c5abf0dcc24fe6e8e0b4a5c0b51a5cf30cefdf6407a3213dae61edc75a70f56"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.8.12+12"
+>>>>>>> Stashed changes
 =======
       sha256: "8c5abf0dcc24fe6e8e0b4a5c0b51a5cf30cefdf6407a3213dae61edc75a70f56"
       url: "https://pub.dev"
@@ -551,7 +632,10 @@ packages:
     source: hosted
     version: "0.19.0"
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 
+=======
+>>>>>>> Stashed changes
 =======
 >>>>>>> Stashed changes
   ionicons:
@@ -619,7 +703,10 @@ packages:
     source: hosted
     version: "1.12.0"
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 
+=======
+>>>>>>> Stashed changes
 =======
 >>>>>>> Stashed changes
   mime:
@@ -630,8 +717,12 @@ packages:
       url: "https://pub.dev"
     source: hosted
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
     version: "1.0.5"
 
+=======
+    version: "1.0.6"
+>>>>>>> Stashed changes
 =======
     version: "1.0.6"
 >>>>>>> Stashed changes
@@ -675,10 +766,17 @@ packages:
     description:
       name: path_provider_android
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
       sha256: "30c5aa827a6ae95ce2853cdc5fe3971daaac00f6f081c419c013f7f57bff2f5e"
       url: "https://pub.dev"
     source: hosted
     version: "2.2.7"
+=======
+      sha256: "6f01f8e37ec30b07bc424b4deabac37cacb1bc7e2e515ad74486039918a37eb7"
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.2.10"
+>>>>>>> Stashed changes
 =======
       sha256: "6f01f8e37ec30b07bc424b4deabac37cacb1bc7e2e515ad74486039918a37eb7"
       url: "https://pub.dev"
@@ -717,9 +815,12 @@ packages:
       url: "https://pub.dev"
     source: hosted
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 
     version: "2.2.1"
 
+=======
+>>>>>>> Stashed changes
 =======
 >>>>>>> Stashed changes
     version: "2.3.0"
@@ -762,10 +863,17 @@ packages:
     description:
       name: shared_preferences_android
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
       sha256: "93d0ec9dd902d85f326068e6a899487d1f65ffcd5798721a95330b26c8131577"
       url: "https://pub.dev"
     source: hosted
     version: "2.2.3"
+=======
+      sha256: "480ba4345773f56acda9abf5f50bd966f581dac5d514e5fc4a18c62976bbba7e"
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.3.2"
+>>>>>>> Stashed changes
 =======
       sha256: "480ba4345773f56acda9abf5f50bd966f581dac5d514e5fc4a18c62976bbba7e"
       url: "https://pub.dev"
@@ -812,8 +920,12 @@ packages:
       url: "https://pub.dev"
     source: hosted
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
     version: "2.3.2"
 
+=======
+    version: "2.4.1"
+>>>>>>> Stashed changes
 =======
     version: "2.4.1"
 >>>>>>> Stashed changes
@@ -888,6 +1000,33 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "4.5.0"
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
+  vector_graphics:
+    dependency: transitive
+    description:
+      name: vector_graphics
+      sha256: "32c3c684e02f9bc0afb0ae0aa653337a2fe022e8ab064bcd7ffda27a74e288e3"
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.1.11+1"
+  vector_graphics_codec:
+    dependency: transitive
+    description:
+      name: vector_graphics_codec
+      sha256: c86987475f162fadff579e7320c7ddda04cd2fdeffbe1129227a85d9ac9e03da
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.1.11+1"
+  vector_graphics_compiler:
+    dependency: transitive
+    description:
+      name: vector_graphics_compiler
+      sha256: "12faff3f73b1741a36ca7e31b292ddeb629af819ca9efe9953b70bd63fc8cd81"
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.1.11+1"
 >>>>>>> Stashed changes
   vector_math:
     dependency: transitive
@@ -910,10 +1049,17 @@ packages:
     description:
       name: video_player_android
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
       sha256: fdc0331ce9f808cc2714014cb8126bd6369943affefd54f8fdab0ea0bb617b7f
       url: "https://pub.dev"
     source: hosted
     version: "2.5.2"
+=======
+      sha256: e343701aa890b74a863fa460f5c0e628127ed06a975d7d9af6b697133fb25bdf
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.7.1"
+>>>>>>> Stashed changes
 =======
       sha256: e343701aa890b74a863fa460f5c0e628127ed06a975d7d9af6b697133fb25bdf
       url: "https://pub.dev"
@@ -961,6 +1107,7 @@ packages:
     source: hosted
     version: "0.5.1"
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 
   win32:
     dependency: transitive
@@ -971,6 +1118,8 @@ packages:
     source: hosted
     version: "5.5.1"
 
+=======
+>>>>>>> Stashed changes
 =======
 >>>>>>> Stashed changes
   xdg_directories:
@@ -999,6 +1148,9 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "9.0.3"
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
 sdks:
   dart: ">=3.4.0 <4.0.0"
