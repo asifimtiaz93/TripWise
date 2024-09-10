@@ -1,27 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-void main() {
-  runApp(const MyApp());
-}
-
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+class SearchPage extends StatefulWidget {
+  const SearchPage({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Search Places',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
-      home: const SearchPage(),
-    );
-  }
+  _SearchPageState createState() => _SearchPageState();
 }
 
-class SearchPage extends StatelessWidget {
-  const SearchPage({super.key});
+class _SearchPageState extends State<SearchPage> {
+  final TextEditingController _searchController = TextEditingController();
+  String _searchTerm = '';
 
   @override
   Widget build(BuildContext context) {
@@ -30,7 +20,7 @@ class SearchPage extends StatelessWidget {
         backgroundColor: Colors.white,
         elevation: 0,
         leading: IconButton(
-          icon: Icon(Icons.arrow_back, color: Colors.black),
+          icon: const Icon(Icons.arrow_back, color: Colors.black),
           onPressed: () {
             // Implement back navigation
           },
@@ -48,7 +38,10 @@ class SearchPage extends StatelessWidget {
         actions: [
           TextButton(
             onPressed: () {
-              // Implement cancel action
+              _searchController.clear();
+              setState(() {
+                _searchTerm = '';
+              });
             },
             child: Text(
               'Cancel',
@@ -68,10 +61,19 @@ class SearchPage extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             TextField(
+              controller: _searchController,
               decoration: InputDecoration(
                 hintText: 'Search Places',
                 prefixIcon: const Icon(Icons.search),
-                suffixIcon: const Icon(Icons.mic),
+                suffixIcon: IconButton(
+                  icon: const Icon(Icons.close),
+                  onPressed: () {
+                    _searchController.clear();
+                    setState(() {
+                      _searchTerm = '';
+                    });
+                  },
+                ),
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(10),
                   borderSide: BorderSide.none,
@@ -79,10 +81,15 @@ class SearchPage extends StatelessWidget {
                 filled: true,
                 fillColor: Colors.grey[200],
               ),
+              onChanged: (value) {
+                setState(() {
+                  _searchTerm = value.toLowerCase(); // Convert search term to lowercase
+                });
+              },
             ),
             const SizedBox(height: 20),
             Text(
-              'Search Places',
+              'Search Results',
               style: GoogleFonts.poppins(
                 textStyle: const TextStyle(
                   fontSize: 18,
@@ -93,101 +100,56 @@ class SearchPage extends StatelessWidget {
             ),
             const SizedBox(height: 20),
             Expanded(
-              child: GridView.count(
-                crossAxisCount: 2,
-                mainAxisSpacing: 10,
-                crossAxisSpacing: 10,
-                children: [
-                  _buildPlaceCard(
-                    'Novem Eco Resort',
-                    'Moulovibazar',
-                    'BDT 5000/Person',
-                    'assets/novem_eco_resort.jpg',
-                  ),
-                  _buildPlaceCard(
-                    'Dusai Resort & Spa',
-                    'Srimangal',
-                    'BDT 11000/Person',
-                    'assets/dusai_resort_spa.jpg',
-                  ),
-                  // Add more cards as needed
-                ],
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
+              child: _searchTerm.isEmpty
+                  ? const Center(child: Text('Start typing to search places...'))
+                  : StreamBuilder<QuerySnapshot>(
+                stream: FirebaseFirestore.instance
+                    .collection('PopularPlace')
+                    .snapshots(),
+                builder: (context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return const Center(child: CircularProgressIndicator());
+                  }
 
-  Widget _buildPlaceCard(
-      String title, String location, String price, String imagePath) {
-    return Card(
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(10),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Expanded(
-            child: ClipRRect(
-              borderRadius: const BorderRadius.vertical(top: Radius.circular(10)),
-              child: Image.asset(
-                imagePath,
-                fit: BoxFit.cover,
-                width: double.infinity,
-                errorBuilder: (context, error, stackTrace) {
-                  return Container(
-                    color: Colors.grey,
-                    child: const Icon(
-                      Icons.image,
-                      size: 50,
-                    ),
+                  if (snapshot.hasError) {
+                    return Center(child: Text('Error: ${snapshot.error}'));
+                  }
+
+                  if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
+                    return const Center(child: Text('No places found.'));
+                  }
+
+                  // Filter results for case-insensitive match
+                  var filteredDocs = snapshot.data!.docs.where((doc) {
+                    var data = doc.data() as Map<String, dynamic>;
+                    var name = data['Name'].toString().toLowerCase(); // Convert to lowercase
+                    return name.contains(_searchTerm); // Match against lowercase search term
+                  }).toList();
+
+                  if (filteredDocs.isEmpty) {
+                    return const Center(child: Text('No places found.'));
+                  }
+
+                  return ListView.builder(
+                    itemCount: filteredDocs.length,
+                    itemBuilder: (context, index) {
+                      var place = filteredDocs[index];
+                      var data = place.data() as Map<String, dynamic>;
+
+                      return ListTile(
+                        title: Text(data['Name']),
+                        subtitle: Text(data['Location']),
+                        onTap: () {
+                          // Implement navigation or action when a place is tapped
+                        },
+                      );
+                    },
                   );
                 },
               ),
             ),
-          ),
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Text(
-              title,
-              style: GoogleFonts.poppins(
-                textStyle: const TextStyle(
-                  fontSize: 14,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.black,
-                ),
-              ),
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 8.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  location,
-                  style: GoogleFonts.poppins(
-                    textStyle: const TextStyle(
-                      fontSize: 12,
-                      color: Colors.grey,
-                    ),
-                  ),
-                ),
-                Text(
-                  price,
-                  style: GoogleFonts.poppins(
-                    textStyle: const TextStyle(
-                      fontSize: 12,
-                      color: Colors.blue,
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
