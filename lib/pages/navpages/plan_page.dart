@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:tripwise/pages/navpages/planpages/plan_page_1.dart';
 import 'package:tripwise/widgets/app_large_text.dart';
-import 'package:tripwise/widgets/responsive_button.dart';
 
 class planPage extends StatelessWidget {
   List<String> images = [
@@ -58,16 +57,16 @@ class planPage extends StatelessWidget {
               child: ElevatedButton(
                 onPressed: (){
                   Navigator.push(context,
-                  MaterialPageRoute(builder: (context)=>PlanPage1()),
+                  MaterialPageRoute(builder: (context)=>const PlanPage1()),
                   );
                 },
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.black,
+                  minimumSize: const Size(80,40),
+                ),
                 child: const Text(
                     "Next",
                     style: TextStyle(color: Colors.white),
-                ),
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.black,
-                  minimumSize: Size(80,40),
                 ),
               ),
             ),
@@ -88,7 +87,12 @@ class planPage extends StatelessWidget {
           width: 100,
           fit: BoxFit.cover,
         ),
+<<<<<<< Updated upstream
         title: Text(title),
+=======
+        title: Text(title,
+            style: const TextStyle(fontWeight: FontWeight.bold)),
+>>>>>>> Stashed changes
         subtitle: Text(subtitle),
         onTap: () {
           // Handle card tap

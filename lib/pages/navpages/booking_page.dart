@@ -28,7 +28,7 @@ class _BookingPageState extends State<BookingPage> with SingleTickerProviderStat
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Booking",
+        title: const Text("Booking",
           style: TextStyle(
             fontWeight: FontWeight.bold,
             fontSize: 24,
@@ -36,7 +36,7 @@ class _BookingPageState extends State<BookingPage> with SingleTickerProviderStat
           ),
         ),
         leading: IconButton(
-          icon: Icon(Icons.arrow_back),
+          icon: const Icon(Icons.arrow_back),
           onPressed: () {
             Navigator.pop(context);
           },
@@ -51,22 +51,22 @@ class _BookingPageState extends State<BookingPage> with SingleTickerProviderStat
               labelColor: Colors.black,
               unselectedLabelColor: Colors.grey,
               indicatorColor: Colors.blue,
-              tabs: [
+              tabs: const [
                 Tab(icon: Icon(Icons.flight), text: "Flight"),
                 Tab(icon: Icon(Icons.train), text: "Train"),
                 Tab(icon: Icon(Icons.directions_bus), text: "Bus"),
                 Tab(icon: Icon(Icons.hotel), text: "Hotel"),
               ],
             ),
-            SizedBox(height: 16),
+            const SizedBox(height: 16),
             Expanded(
               child: TabBarView(
                 controller: _tabController,
                 children: [
                   bookingOptionsList(flightOptions),
-                  Center(child: Text("Train booking not available yet.")),
+                  const Center(child: Text("Train booking not available yet.")),
                   bookingOptionsList(busOptions),
-                  Center(child: Text("Hotel booking not available yet.")),
+                  const Center(child: Text("Hotel booking not available yet.")),
                 ],
               ),
             ),
@@ -89,7 +89,7 @@ class _BookingPageState extends State<BookingPage> with SingleTickerProviderStat
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               ClipRRect(
-                borderRadius: BorderRadius.vertical(top: Radius.circular(12)),
+                borderRadius: const BorderRadius.vertical(top: Radius.circular(12)),
                 child: Image.asset(
                   option.imageUrl,
                   fit: BoxFit.cover,
@@ -104,21 +104,21 @@ class _BookingPageState extends State<BookingPage> with SingleTickerProviderStat
                   children: [
                     Text(
                       option.title,
-                      style: TextStyle(
+                      style: const TextStyle(
                         fontSize: 16,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
                     Text(
                       option.subtitle,
-                      style: TextStyle(
+                      style: const TextStyle(
                         fontSize: 12,
                         color: Colors.grey,
                       ),
                     ),
                     Text(
                       "Start from BDT ${option.price}",
-                      style: TextStyle(
+                      style: const TextStyle(
                         fontSize: 14,
                         fontWeight: FontWeight.bold,
                         color: Colors.blue,

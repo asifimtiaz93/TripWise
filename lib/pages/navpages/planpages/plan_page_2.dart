@@ -30,7 +30,7 @@ class PlanPage2 extends StatelessWidget {
             const SizedBox(
               height: 46,
             ),
-            Container(
+            SizedBox(
               height: 200, // Fixed height for GridView
               child: GridView.count(
                 crossAxisCount: 2,
@@ -82,9 +82,44 @@ class PlanPage2 extends StatelessWidget {
                   style: OutlinedButton.styleFrom(
                     padding: const EdgeInsets.symmetric(horizontal: 40),
                   ),
+<<<<<<< Updated upstream
                 ),
               ],
             ),
+=======
+                  const SizedBox(
+                    height: 16,
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      OutlinedButton(
+                        onPressed: () => _selectTravelWithChildren('Yes'),
+                        style: OutlinedButton.styleFrom(
+                          padding: const EdgeInsets.symmetric(horizontal: 40),
+                          backgroundColor:
+                          _travelWithChildren == 'Yes' ? Colors.blue : Colors.transparent,
+                          disabledBackgroundColor:
+                          _travelWithChildren == 'Yes' ? Colors.white : Colors.black,
+                        ),
+                        child: const Text('Yes'),
+                      ),
+                      OutlinedButton(
+                        onPressed: () => _selectTravelWithChildren('No'),
+                        style: OutlinedButton.styleFrom(
+                          padding: const EdgeInsets.symmetric(horizontal: 40),
+                          backgroundColor:
+                          _travelWithChildren == 'No' ? Colors.blue : Colors.transparent,
+                          disabledBackgroundColor:
+                          _travelWithChildren == 'No' ? Colors.white : Colors.black,
+                        ),
+                        child: const Text('No'),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+>>>>>>> Stashed changes
             const Spacer(),
             Center(
               child: ElevatedButton(
@@ -92,8 +127,13 @@ class PlanPage2 extends StatelessWidget {
                   Navigator.push(context,
                     MaterialPageRoute(builder: (context)=>const PlanPage3()),
                   );
+<<<<<<< Updated upstream
                 },
                 child: const Text('Next'),
+=======
+                }
+                    : null,
+>>>>>>> Stashed changes
                 style: ElevatedButton.styleFrom(
                   padding: const EdgeInsets.symmetric(
                     horizontal: 40,
@@ -103,6 +143,7 @@ class PlanPage2 extends StatelessWidget {
                     borderRadius: BorderRadius.circular(25.0),
                   ),
                 ),
+                child: const Text('Next'),
               ),
             ),
             const SizedBox(height: 16),
@@ -116,8 +157,21 @@ class PlanPage2 extends StatelessWidget {
 class SelectableCard extends StatelessWidget {
   final IconData icon;
   final String label;
+<<<<<<< Updated upstream
   const SelectableCard({required this.icon, required this.label, Key? key})
       : super(key: key);
+=======
+  final bool selected;
+  final VoidCallback onTap;
+
+  const SelectableCard({
+    required this.icon,
+    required this.label,
+    required this.selected,
+    required this.onTap,
+    super.key,
+  });
+>>>>>>> Stashed changes
 
   @override
   Widget build(BuildContext context) {

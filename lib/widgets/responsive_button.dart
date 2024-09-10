@@ -7,11 +7,11 @@ class ResponsiveButton extends StatelessWidget {
   final String text;
 
   ResponsiveButton({
-    Key? key,
+    super.key,
     this.width,
     this.isResponsive = false,
     this.text = '',
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -27,7 +27,7 @@ class ResponsiveButton extends StatelessWidget {
         children: [
           Text(
             text,
-            style: TextStyle(
+            style: const TextStyle(
               color: AppColors.buttonTextColor,
               fontSize: 20,
               fontWeight: FontWeight.bold,

@@ -30,6 +30,7 @@ class PlanPage1 extends StatelessWidget {
             const SizedBox(
               height: 46,
             ),
+<<<<<<< Updated upstream
             Container(
               padding: const EdgeInsets.all(8.0),
               decoration: BoxDecoration(
@@ -39,6 +40,28 @@ class PlanPage1 extends StatelessWidget {
               child: const Text(
                 'Trip Length',
                 style: TextStyle(fontSize: 16),
+=======
+            GestureDetector(
+              onTap: () => _selectDateRange(context),
+              child: Container(
+                padding: const EdgeInsets.all(8.0),
+                decoration: BoxDecoration(
+                  color: Colors.grey[300],
+                  borderRadius: BorderRadius.circular(25.0),
+                ),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      _selectedDateRange == null
+                          ? 'Select Date Range'
+                          : '${DateFormat('dd/MM/yyyy').format(_selectedDateRange!.start)} - ${DateFormat('dd/MM/yyyy').format(_selectedDateRange!.end)}',
+                      style: const TextStyle(fontSize: 16),
+                    ),
+                    const Icon(Icons.calendar_today),
+                  ],
+                ),
+>>>>>>> Stashed changes
               ),
             ),
             const SizedBox(
@@ -115,7 +138,6 @@ class PlanPage1 extends StatelessWidget {
                     MaterialPageRoute(builder: (context)=>const PlanPage2()),
                   );
                 },
-                child: const Text('Next'),
                 style: ElevatedButton.styleFrom(
                   padding: const EdgeInsets.symmetric(
                     horizontal: 40,
@@ -125,6 +147,7 @@ class PlanPage1 extends StatelessWidget {
                     borderRadius: BorderRadius.circular(25.0),
                   ),
                 ),
+                child: const Text('Next'),
               ),
             ),
             const SizedBox(height: 16),

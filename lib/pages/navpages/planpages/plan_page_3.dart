@@ -1,4 +1,9 @@
 import 'package:flutter/material.dart';
+<<<<<<< Updated upstream
+=======
+import 'package:tripwise/pages/navpages/planpages/plan_page_2.dart';
+import 'package:tripwise/pages/navpages/planpages/plan_page_final.dart';
+>>>>>>> Stashed changes
 
 class PlanPage3 extends StatefulWidget {
   const PlanPage3({super.key});
@@ -83,7 +88,6 @@ class _PlanPage3State extends State<PlanPage3> {
                 onPressed: () {
                   // Navigate to next page
                 },
-                child: const Text('Next'),
                 style: ElevatedButton.styleFrom(
                   padding: const EdgeInsets.symmetric(
                     horizontal: 40,
@@ -93,6 +97,7 @@ class _PlanPage3State extends State<PlanPage3> {
                     borderRadius: BorderRadius.circular(25.0),
                   ),
                 ),
+                child: const Text('Next'),
               ),
             ),
             const SizedBox(height: 16),

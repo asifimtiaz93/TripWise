@@ -1,7 +1,6 @@
 // lib/pages/navpages/destination_details.dart
 
 import 'package:flutter/material.dart';
-import 'booking_page.dart';
 import 'main_page.dart';
 import 'reviews_page.dart';  // Import the reviews page
 
@@ -30,12 +29,13 @@ class DestinationDetailsPage extends StatelessWidget {
             expandedHeight: 300.0,
             pinned: true,
             flexibleSpace: FlexibleSpaceBar(
-              title: Text(""),
+              title: const Text(""),
               background: Image.asset(
                 imageUrl,
                 fit: BoxFit.cover,
               ),
             ),
+<<<<<<< Updated upstream
             leading: Container(
               margin: const EdgeInsets.all(8.0),
               decoration: BoxDecoration(
@@ -48,6 +48,13 @@ class DestinationDetailsPage extends StatelessWidget {
                   Navigator.pop(context);
                 },
               ),
+=======
+            leading: IconButton(
+              icon: const Icon(Icons.arrow_back),
+              onPressed: () {
+                Navigator.pop(context);
+              },
+>>>>>>> Stashed changes
             ),
           ),
           SliverList(
@@ -59,20 +66,21 @@ class DestinationDetailsPage extends StatelessWidget {
                   children: [
                     Text(
                       title,
-                      style: TextStyle(
+                      style: const TextStyle(
                         fontSize: 24,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
-                    SizedBox(height: 8),
+                    const SizedBox(height: 8),
                     Row(
                       children: [
-                        Icon(Icons.location_on, color: Colors.grey),
-                        SizedBox(width: 4),
+                        const Icon(Icons.location_on, color: Colors.grey),
+                        const SizedBox(width: 4),
                         Text(
                           location,
-                          style: TextStyle(fontSize: 16, color: Colors.grey),
+                          style: const TextStyle(fontSize: 16, color: Colors.grey),
                         ),
+<<<<<<< Updated upstream
                         Spacer(),
                         GestureDetector(
                           onTap: () {
@@ -106,30 +114,38 @@ class DestinationDetailsPage extends StatelessWidget {
                               ),
                             ),
                           ),
+=======
+                        const Spacer(),
+                        const Icon(Icons.star, color: Colors.amber),
+                        const SizedBox(width: 4),
+                        Text(
+                          rating.toString(),
+                          style: const TextStyle(fontSize: 16),
+>>>>>>> Stashed changes
                         ),
                       ],
                     ),
-                    SizedBox(height: 16),
-                    Text(
+                    const SizedBox(height: 16),
+                    const Text(
                       "About Destination",
                       style: TextStyle(
                         fontSize: 18,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
-                    SizedBox(height: 8),
+                    const SizedBox(height: 8),
                     Text(
                       description,
-                      style: TextStyle(fontSize: 16),
+                      style: const TextStyle(fontSize: 16),
                     ),
-                    SizedBox(height: 16),
+                    const SizedBox(height: 16),
                     Center(
                       child: ElevatedButton(
                         onPressed: () {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                              builder: (context) => MainPage(initialIndex: 6),
+                              builder: (context) => const MainPage(initialIndex: 6),
                             ),
                           );
                         },
@@ -141,7 +157,7 @@ class DestinationDetailsPage extends StatelessWidget {
                         ),
                         child: Ink(
                           decoration: BoxDecoration(
-                            gradient: LinearGradient(
+                            gradient: const LinearGradient(
                               colors: [Colors.blue, Colors.lightBlueAccent],
                               begin: Alignment.topLeft,
                               end: Alignment.bottomRight,
@@ -149,9 +165,9 @@ class DestinationDetailsPage extends StatelessWidget {
                             borderRadius: BorderRadius.circular(16),
                           ),
                           child: Container(
-                            padding: EdgeInsets.symmetric(horizontal: 32, vertical: 16),
+                            padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 16),
                             alignment: Alignment.center,
-                            child: Text(
+                            child: const Text(
                               "Book Now",
                               style: TextStyle(
                                 fontSize: 18,

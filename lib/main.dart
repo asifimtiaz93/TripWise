@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+<<<<<<< Updated upstream
 import 'package:tripwise/pages/navpages/main_page.dart';
+=======
+import 'package:tripwise/firebase_options.dart';
+>>>>>>> Stashed changes
 import 'package:tripwise/pages/welcome_page.dart';
 
 void main() {
@@ -18,7 +22,7 @@ class MyApp extends StatelessWidget {
         debugShowCheckedModeBanner: false,
         theme: ThemeData(
             colorScheme: ColorScheme.fromSeed(
-                seedColor: Color.fromARGB(255, 3, 112, 255)),
+                seedColor: const Color.fromARGB(255, 3, 112, 255)),
             textTheme: GoogleFonts.mulishTextTheme(
               Theme.of(context).textTheme,
             )),

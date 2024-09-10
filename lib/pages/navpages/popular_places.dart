@@ -10,7 +10,7 @@ class PopularPlacesPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(
+        title: const Text(
           "Popular Places",
           style: TextStyle(
             fontWeight: FontWeight.bold,
@@ -19,7 +19,7 @@ class PopularPlacesPage extends StatelessWidget {
           ),
         ),
         leading: IconButton(
-          icon: Icon(Icons.arrow_back),
+          icon: const Icon(Icons.arrow_back),
           onPressed: () {
             Navigator.pop(context);
           },
@@ -30,17 +30,17 @@ class PopularPlacesPage extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(
+            const Text(
               "All Popular Places in Sylhet",
               style: TextStyle(
                 fontSize: 24,
                 fontWeight: FontWeight.bold,
               ),
             ),
-            SizedBox(height: 16),
+            const SizedBox(height: 16),
             Expanded(
               child: GridView.builder(
-                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                   crossAxisCount: 2,
                   crossAxisSpacing: 16,
                   mainAxisSpacing: 16,
@@ -83,7 +83,7 @@ class PopularPlacesPage extends StatelessWidget {
           children: [
             Expanded(
               child: ClipRRect(
-                borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
+                borderRadius: const BorderRadius.vertical(top: Radius.circular(16)),
                 child: Image.asset(
                   place.imageUrl,
                   fit: BoxFit.cover,
@@ -98,25 +98,25 @@ class PopularPlacesPage extends StatelessWidget {
                 children: [
                   Text(
                     place.name,
-                    style: TextStyle(
+                    style: const TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
                   Text(
                     place.location,
-                    style: TextStyle(
+                    style: const TextStyle(
                       fontSize: 12,
                       color: Colors.grey,
                     ),
                   ),
                   Row(
                     children: [
-                      Icon(Icons.star, color: Colors.amber, size: 16),
-                      SizedBox(width: 4),
+                      const Icon(Icons.star, color: Colors.amber, size: 16),
+                      const SizedBox(width: 4),
                       Text(
                         place.rating.toString(),
-                        style: TextStyle(
+                        style: const TextStyle(
                           fontSize: 14,
                           fontWeight: FontWeight.bold,
                         ),
@@ -125,7 +125,7 @@ class PopularPlacesPage extends StatelessWidget {
                   ),
                   Text(
                     "৳${place.price}/Person",
-                    style: TextStyle(
+                    style: const TextStyle(
                       fontSize: 14,
                       fontWeight: FontWeight.bold,
                       color: Colors.blue,

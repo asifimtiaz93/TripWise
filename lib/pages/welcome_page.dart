@@ -4,9 +4,12 @@ import 'package:tripwise/widgets/app_large_text.dart';
 import 'package:tripwise/widgets/app_text.dart';
 import 'package:tripwise/widgets/responsive_button.dart';
 
-import '../misc/colors.dart';
 
+<<<<<<< Updated upstream
 import 'navpages/main_page.dart';
+=======
+import 'navpages/onboard_info_1.dart';
+>>>>>>> Stashed changes
 
 
 class WelcomePage extends StatefulWidget {
@@ -71,7 +74,12 @@ class _WelcomePageState extends State<WelcomePage> {
 
                             size: 30,
                           ),
+<<<<<<< Updated upstream
                           Container(
+=======
+                          const SizedBox(height: 100,),
+                          SizedBox(
+>>>>>>> Stashed changes
                             width: 250,
                             child: AppText(
                                 text:
@@ -80,7 +88,7 @@ class _WelcomePageState extends State<WelcomePage> {
                                  color: Colors.white,
                                 ),
                           ),
-                          SizedBox(height: 40,),
+                          const SizedBox(height: 40,),
                           GestureDetector(
                             onTap: _navigatetoPop,
                             child: ResponsiveButton(width: 120,text: 'Next',),

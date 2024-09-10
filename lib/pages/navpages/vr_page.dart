@@ -36,7 +36,7 @@ class _vrPageState extends State<vrPage> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Wrap(
+                      const Wrap(
                         spacing: 8.0,
                         children: List<Widget>.generate(
                           _chipLabels.length,
@@ -68,29 +68,29 @@ class _vrPageState extends State<vrPage> {
                           },
                         ),
                       ),
-                      SizedBox(height: 10),
-                      Text(
+                      const SizedBox(height: 10),
+                      const Text(
                         "360 Videos",
                         style: TextStyle(
                           fontSize: 24,
                           fontWeight: FontWeight.bold,
                         ),
                       ),
-                      SizedBox(height: 10),
+                      const SizedBox(height: 10),
                       tourVideoCard(context, '-758gHCMn0M', 'Shugondha Beach'),
-                      SizedBox(height: 10),
+                      const SizedBox(height: 10),
                       tourVideoCard(context, 'mH4tCp0utH4', 'Kaptai'),
-                      SizedBox(height: 10),
-                      Text(
+                      const SizedBox(height: 10),
+                      const Text(
                         "Tour Videos",
                         style: TextStyle(
                           fontSize: 24,
                           fontWeight: FontWeight.bold,
                         ),
                       ),
-                      SizedBox(height: 10),
+                      const SizedBox(height: 10),
                       tourVideoCard(context, 'sffrf1ZvtlM', 'Into the Nature'),
-                      SizedBox(height: 10),
+                      const SizedBox(height: 10),
                       tourVideoCard(context, 'tbvK3nac8to', 'Puran Dhaka'),
                     ],
                   ),
@@ -122,7 +122,7 @@ class _vrPageState extends State<vrPage> {
       },
       child: Container(
         width: double.infinity,
-        margin: EdgeInsets.only(bottom: 16),
+        margin: const EdgeInsets.only(bottom: 16),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -130,15 +130,15 @@ class _vrPageState extends State<vrPage> {
               borderRadius: BorderRadius.circular(12),
               child: TourVideoPlayer(videoId: videoId),
             ),
-            SizedBox(height: 8),
+            const SizedBox(height: 8),
             Text(
               title,
-              style: TextStyle(
+              style: const TextStyle(
                 fontSize: 16,
                 fontWeight: FontWeight.bold,
               ),
             ),
-            Text(
+            const Text(
               'Uploaded by Nofaer\n20 May 2024',
               style: TextStyle(
                 fontSize: 12,
@@ -155,7 +155,7 @@ class _vrPageState extends State<vrPage> {
 class TourVideoPlayer extends StatefulWidget {
   final String videoId;
 
-  const TourVideoPlayer({Key? key, required this.videoId}) : super(key: key);
+  const TourVideoPlayer({super.key, required this.videoId});
 
   @override
   _TourVideoPlayerState createState() => _TourVideoPlayerState();
@@ -169,7 +169,7 @@ class _TourVideoPlayerState extends State<TourVideoPlayer> {
     super.initState();
     _controller = YoutubePlayerController(
       initialVideoId: widget.videoId,
-      flags: YoutubePlayerFlags(
+      flags: const YoutubePlayerFlags(
         autoPlay: false,
         mute: false,
       ),
@@ -196,7 +196,7 @@ class FullScreenVideoPlayer extends StatelessWidget {
   final String videoId;
   final String title;
 
-  const FullScreenVideoPlayer({Key? key, required this.videoId, required this.title}) : super(key: key);
+  const FullScreenVideoPlayer({super.key, required this.videoId, required this.title});
 
   @override
   Widget build(BuildContext context) {
@@ -209,7 +209,7 @@ class FullScreenVideoPlayer extends StatelessWidget {
         child: YoutubePlayer(
           controller: YoutubePlayerController(
             initialVideoId: videoId,
-            flags: YoutubePlayerFlags(
+            flags: const YoutubePlayerFlags(
               autoPlay: true,
               mute: false,
             ),
