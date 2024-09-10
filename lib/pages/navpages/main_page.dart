@@ -14,6 +14,7 @@ import 'package:tripwise/pages/navpages/onboard_info_3.dart';
 import 'package:tripwise/pages/navpages/onboard_info_2.dart';
 
 import 'admin_page.dart';
+import 'booking_history.dart';
 
 class MainPage extends StatefulWidget {
   final int initialIndex;
@@ -50,6 +51,7 @@ class _MainPageState extends State<MainPage> {
     SettingsPage(),
     OnboardInfoFillup2(selectedPlaces: selectedPlaces),
     OnboardInfoFillup3(selectedPlaces: selectedPlaces, relationshipStatus: relationshipStatus),
+    BookingHistoryPage(),
   ];
 
   final Map<int, int> bottomNavBarPageMapping = {
@@ -137,6 +139,11 @@ class _MainPageState extends State<MainPage> {
               leading: Icon(Icons.admin_panel_settings_sharp),
               title: Text('Admin'),
               onTap: () => onDrawerTapped(8),
+            ),
+            ListTile(
+              leading: Icon(Icons.admin_panel_settings_sharp),
+              title: Text('Booking History'),
+              onTap: () => onDrawerTapped(9),
             ),
           ],
 
