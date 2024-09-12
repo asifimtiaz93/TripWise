@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_storage/firebase_storage.dart';
+import 'package:image_picker/image_picker.dart';
+import 'dart:io';
 
 class ManagePopularPlacesPage extends StatefulWidget {
   const ManagePopularPlacesPage({super.key});
@@ -16,6 +19,12 @@ class _ManagePopularPlacesPageState extends State<ManagePopularPlacesPage> {
   final TextEditingController _budgetController = TextEditingController();
   final TextEditingController _ratingsController = TextEditingController();
   final TextEditingController _costController = TextEditingController();
+
+  File? _imageFile;
+  bool _isUploading = false;
+  String? _imageUrl;
+
+  final ImagePicker _picker = ImagePicker();
 
   bool _adventureSports = false;
   bool _beaches = false;
@@ -35,6 +44,49 @@ class _ManagePopularPlacesPageState extends State<ManagePopularPlacesPage> {
     _ratingsController.dispose();
     _costController.dispose();
     super.dispose();
+  }
+
+  Future<void> _pickImage() async {
+    final pickedFile = await _picker.pickImage(source: ImageSource.gallery);
+    if (pickedFile != null) {
+      setState(() {
+        _imageFile = File(pickedFile.path);
+      });
+    }
+  }
+
+  Future<void> _uploadImage() async {
+    if (_imageFile == null) return;
+
+    setState(() {
+      _isUploading = true;
+    });
+
+    try {
+      // Upload the image to Firebase Storage
+      String fileName = _imageFile!.path.split('/').last;
+      Reference storageRef = FirebaseStorage.instance.ref().child('popular_places/$fileName');
+      UploadTask uploadTask = storageRef.putFile(_imageFile!);
+
+      TaskSnapshot taskSnapshot = await uploadTask;
+      _imageUrl = await taskSnapshot.ref.getDownloadURL();
+
+      setState(() {
+        _isUploading = false;
+      });
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Image uploaded successfully')),
+      );
+    } catch (e) {
+      setState(() {
+        _isUploading = false;
+      });
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Failed to upload image: $e')),
+      );
+    }
   }
 
   @override
@@ -107,6 +159,24 @@ class _ManagePopularPlacesPageState extends State<ManagePopularPlacesPage> {
                   border: OutlineInputBorder(),
                 ),
                 keyboardType: TextInputType.number,
+              ),
+              const SizedBox(height: 16),
+              _imageFile == null
+                  ? ElevatedButton(
+                onPressed: _pickImage,
+                child: const Text('Pick Image'),
+              )
+                  : Column(
+                children: [
+                  Image.file(_imageFile!),
+                  const SizedBox(height: 16),
+                  ElevatedButton(
+                    onPressed: _uploadImage,
+                    child: _isUploading
+                        ? const CircularProgressIndicator()
+                        : const Text('Upload Image'),
+                  ),
+                ],
               ),
               const SizedBox(height: 16),
               CheckboxListTile(
@@ -185,7 +255,13 @@ class _ManagePopularPlacesPageState extends State<ManagePopularPlacesPage> {
               const SizedBox(height: 16),
               ElevatedButton(
                 onPressed: () async {
-                  // Handle form submission logic here
+                  if (_imageUrl == null) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(content: Text('Please upload an image')),
+                    );
+                    return;
+                  }
+
                   try {
                     await FirebaseFirestore.instance.collection('PopularPlace').add({
                       'DestinationID': _destinationIdController.text,
@@ -195,6 +271,7 @@ class _ManagePopularPlacesPageState extends State<ManagePopularPlacesPage> {
                       'Budget': _budgetController.text,
                       'Ratings': _ratingsController.text,
                       'Cost': _costController.text,
+                      'ImageURL': _imageUrl, // Store the image URL
                       'Attributes': {
                         'AdventureSports': _adventureSports,
                         'Beaches': _beaches,
@@ -226,6 +303,8 @@ class _ManagePopularPlacesPageState extends State<ManagePopularPlacesPage> {
                       _historicalPlaces = false;
                       _mountains = false;
                       _relationStatus = 'Single';
+                      _imageFile = null;
+                      _imageUrl = null;
                     });
                   } catch (e) {
                     ScaffoldMessenger.of(context).showSnackBar(

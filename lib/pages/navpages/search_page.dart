@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'place_detail_page.dart'; // Import your PlaceDetailPage
 
 class SearchPage extends StatefulWidget {
   const SearchPage({super.key});
@@ -22,7 +23,7 @@ class _SearchPageState extends State<SearchPage> {
         leading: IconButton(
           icon: const Icon(Icons.arrow_back, color: Colors.black),
           onPressed: () {
-            // Implement back navigation
+            Navigator.pop(context); // Back navigation
           },
         ),
         title: Text(
@@ -107,40 +108,59 @@ class _SearchPageState extends State<SearchPage> {
                     .collection('PopularPlace')
                     .snapshots(),
                 builder: (context, snapshot) {
-                  if (snapshot.connectionState == ConnectionState.waiting) {
-                    return const Center(child: CircularProgressIndicator());
+                  if (snapshot.connectionState ==
+                      ConnectionState.waiting) {
+                    return const Center(
+                        child: CircularProgressIndicator());
                   }
 
                   if (snapshot.hasError) {
-                    return Center(child: Text('Error: ${snapshot.error}'));
+                    return Center(
+                        child: Text('Error: ${snapshot.error}'));
                   }
 
-                  if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
-                    return const Center(child: Text('No places found.'));
+                  if (!snapshot.hasData ||
+                      snapshot.data!.docs.isEmpty) {
+                    return const Center(
+                        child: Text('No places found.'));
                   }
 
                   // Filter results for case-insensitive match
                   var filteredDocs = snapshot.data!.docs.where((doc) {
-                    var data = doc.data() as Map<String, dynamic>;
-                    var name = data['Name'].toString().toLowerCase(); // Convert to lowercase
-                    return name.contains(_searchTerm); // Match against lowercase search term
+                    var data =
+                    doc.data() as Map<String, dynamic>;
+                    var name = data['Name']
+                        .toString()
+                        .toLowerCase(); // Convert to lowercase
+                    return name
+                        .contains(_searchTerm); // Match against lowercase search term
                   }).toList();
 
                   if (filteredDocs.isEmpty) {
-                    return const Center(child: Text('No places found.'));
+                    return const Center(
+                        child: Text('No places found.'));
                   }
 
                   return ListView.builder(
                     itemCount: filteredDocs.length,
                     itemBuilder: (context, index) {
                       var place = filteredDocs[index];
-                      var data = place.data() as Map<String, dynamic>;
+                      var data =
+                      place.data() as Map<String, dynamic>;
 
                       return ListTile(
                         title: Text(data['Name']),
                         subtitle: Text(data['Location']),
                         onTap: () {
-                          // Implement navigation or action when a place is tapped
+                          // Navigate to PlaceDetailPage when a place is tapped
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => PlaceDetailPage(
+                                placeId: place.id, // Pass the document ID as placeId
+                              ),
+                            ),
+                          );
                         },
                       );
                     },

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:tripwise/pages/navpages/place_detail_page.dart';
 import 'package:tripwise/pages/navpages/popular_places.dart';
 import 'main_page.dart';
 
@@ -25,9 +26,11 @@ class _homePageState extends State<homePage> {
 
   Future<void> _fetchUserName() async {
     if (widget.user != null) {
-      DocumentSnapshot userDoc = await FirebaseFirestore.instance.collection('User').doc(widget.user!.uid).get();
+      DocumentSnapshot userDoc = await FirebaseFirestore.instance.collection(
+          'User').doc(widget.user!.uid).get();
       if (userDoc.exists) {
-        Map<String, dynamic>? userData = userDoc.data() as Map<String, dynamic>?;
+        Map<String, dynamic>? userData = userDoc.data() as Map<String,
+            dynamic>?;
         if (userData != null) {
           setState(() {
             userName = userData['Name'] ?? 'Guest';
@@ -48,12 +51,7 @@ class _homePageState extends State<homePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text(
-          'TripWise',
-          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 28),
-        ),
-      ),
+
       backgroundColor: Colors.white,
       body: SingleChildScrollView(
         child: Padding(
@@ -132,7 +130,7 @@ class _homePageState extends State<homePage> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
-                    'Best Destinations',
+                    'Popular Places',
                     style: GoogleFonts.poppins(
                       textStyle: TextStyle(
                         fontSize: 18,
@@ -154,7 +152,8 @@ class _homePageState extends State<homePage> {
               SizedBox(
                 height: 250,
                 child: StreamBuilder<QuerySnapshot>(
-                  stream: FirebaseFirestore.instance.collection('Destination').snapshots(),
+                  stream: FirebaseFirestore.instance.collection('PopularPlace')
+                      .snapshots(),
                   builder: (context, snapshot) {
                     if (snapshot.connectionState == ConnectionState.waiting) {
                       return Center(child: CircularProgressIndicator());
@@ -166,33 +165,43 @@ class _homePageState extends State<homePage> {
                     }
 
                     if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
-                      print('No destinations found.');
-                      return Center(child: Text('No destinations found.'));
+                      print('No popular places found.');
+                      return Center(child: Text('No popular places found.'));
                     }
 
-                    print("Total destinations found: ${snapshot.data!.docs.length}");
+                    print("Total popular places found: ${snapshot.data!.docs
+                        .length}");
 
                     return ListView(
                       scrollDirection: Axis.horizontal,
                       children: snapshot.data!.docs.map((doc) {
-                        Map<String, dynamic> data = doc.data() as Map<String, dynamic>;
+                        Map<String, dynamic> data = doc.data() as Map<
+                            String,
+                            dynamic>;
                         if (data.isEmpty) {
                           print("Empty data for doc: ${doc.id}");
                           return SizedBox.shrink();
                         }
-                        print("Destination data: $data");
-                        return _buildDestinationCard(
+                        print("Popular Place data: $data");
+                        return _buildPopularPlaceCard(
                           context,
-                          image: data['ImageURL'], // Updated field name
-                          title: data['Name'], // Updated field name
-                          location: data['Location'], // Updated field name
-                          rating: (data['Rating'] as num).toDouble(), // Updated field name
+                          placeId: doc.id,
+                          // Pass the document ID as placeId
+                          image: data['ImageURL'],
+                          // Use the ImageURL from Firestore
+                          title: data['Name'],
+                          // Popular place name
+                          location: data['Location'],
+                          // Popular place location
+                          rating: double.tryParse(data['Ratings'].toString()) ??
+                              0.0, // Parse the rating safely
                         );
                       }).toList(),
                     );
                   },
                 ),
               ),
+
             ],
           ),
         ),
@@ -200,18 +209,21 @@ class _homePageState extends State<homePage> {
     );
   }
 
-  Widget _buildDestinationCard(
-      BuildContext context, {
-        required String image,
-        required String title,
-        required String location,
-        required double rating,
-      }) {
+  Widget _buildPopularPlaceCard(BuildContext context, {
+    required String placeId, // Add placeId as a parameter
+    required String image,
+    required String title,
+    required String location,
+    required double rating,
+  }) {
     return GestureDetector(
       onTap: () {
         Navigator.push(
           context,
-          MaterialPageRoute(builder: (context) => MainPage(initialIndex: 5)),
+          MaterialPageRoute(
+            builder: (context) => PlaceDetailPage(
+                placeId: placeId), // Pass placeId to PlaceDetailPage
+          ),
         );
       },
       child: Container(
@@ -220,7 +232,8 @@ class _homePageState extends State<homePage> {
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(16),
           image: DecorationImage(
-            image: NetworkImage(image), // Use NetworkImage to load image from URL
+            image: NetworkImage(image),
+            // Use NetworkImage to load image from URL
             fit: BoxFit.cover,
           ),
         ),

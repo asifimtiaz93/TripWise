@@ -1,10 +1,19 @@
 import 'package:flutter/material.dart';
-import 'package:tripwise/pages/navpages/plan_page.dart';
-import 'package:tripwise/pages/navpages/planpages/plan_page_2.dart';
 import 'package:tripwise/pages/navpages/planpages/plan_page_final.dart';
 
 class PlanPage3 extends StatefulWidget {
-  const PlanPage3({super.key});
+  final String location; // Pass the location from previous pages
+  final DateTimeRange selectedDateRange; // Pass the selected date range
+  final String selectedOption; // Pass the selected option from PlanPage2
+  final String? travelWithChildren; // Pass the travel with children option (nullable)
+
+  const PlanPage3({
+    super.key,
+    required this.location,
+    required this.selectedDateRange,
+    required this.selectedOption,
+    this.travelWithChildren, // Nullable travel with children
+  });
 
   @override
   State<PlanPage3> createState() => _PlanPage3State();
@@ -12,31 +21,25 @@ class PlanPage3 extends StatefulWidget {
 
 class _PlanPage3State extends State<PlanPage3> {
   final List<String> _options = [
-    'Must-see attractions',
-    'Great Food',
-    'Hidden Gems',
-    'Beach Resorts',
-    'Historical Sites',
-    'River Cruises',
-    'Shopping',
-    'Cultural Experiences',
-    'Natural Reserves',
-    'Temples and Mosques',
-    'Folk Arts and Crafts',
-    'Adventure Activities'
+    'Adventure Sports',     // Mapped to 'AdventureSports'
+    'Beach Relaxation',     // Mapped to 'Beaches'
+    'City Exploration',     // Mapped to 'Cities'
+    'Cultural Experiences', // Mapped to 'CulturalSites'
+    'Historical Landmarks', // Mapped to 'HistoricalPlaces'
+    'Mountain Hikes',       // Mapped to 'Mountains'
   ];
 
-  final List<bool> _selected = List.generate(12, (index) => false);
+  final List<bool> _selected = List.generate(6, (index) => false);
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text(''),
+        title: const Text('Choose Activities'),
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
           onPressed: () {
-            Navigator.push(context, MaterialPageRoute(builder: (context)=>const PlanPage2()));
+            Navigator.pop(context);
           },
         ),
       ),
@@ -84,7 +87,27 @@ class _PlanPage3State extends State<PlanPage3> {
             Center(
               child: ElevatedButton(
                 onPressed: () {
-                  Navigator.push(context, MaterialPageRoute(builder: (context)=>const PlanReadyPage()),);
+                  // Collect selected activities and pass them to PlanReadyPage
+                  List<String> selectedActivities = [];
+                  for (int i = 0; i < _options.length; i++) {
+                    if (_selected[i]) {
+                      selectedActivities.add(_options[i]);
+                    }
+                  }
+
+                  // Navigate to PlanReadyPage with the selected activities, location, date range, selected option, and travel with children
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => PlanReadyPage(
+                        location: widget.location,
+                        selectedDateRange: widget.selectedDateRange,
+                        selectedOption: widget.selectedOption, // Pass selected option
+                        travelWithChildren: widget.travelWithChildren, // Pass travel with children if applicable
+                        selectedActivities: selectedActivities, // Pass selected activities
+                      ),
+                    ),
+                  );
                 },
                 child: const Text('Next'),
                 style: ElevatedButton.styleFrom(
@@ -102,9 +125,6 @@ class _PlanPage3State extends State<PlanPage3> {
           ],
         ),
       ),
-
     );
   }
 }
-
-

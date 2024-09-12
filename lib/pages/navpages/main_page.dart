@@ -41,7 +41,7 @@ class _MainPageState extends State<MainPage> {
     homePage(user: widget.user),
     vrPage(),
     SearchPage(),
-    planPage(),
+    PlanPage(),
     profilePage(user: widget.user),
     PopularPlacesPage(),
     BookingPage(),
@@ -143,7 +143,7 @@ class _MainPageState extends State<MainPage> {
             ListTile(
               leading: Icon(Icons.admin_panel_settings_sharp),
               title: Text('Booking History'),
-              onTap: () => onDrawerTapped(9),
+              onTap: () => onDrawerTapped(13),
             ),
           ],
 

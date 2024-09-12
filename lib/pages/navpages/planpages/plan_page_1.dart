@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:tripwise/pages/navpages/planpages/plan_page_2.dart';
 import 'package:tripwise/widgets/app_large_text.dart';
 import 'package:tripwise/widgets/app_text.dart';
-import 'package:intl/intl.dart';
 
 class PlanPage1 extends StatefulWidget {
-  const PlanPage1({super.key});
+  final String location; // Accept the location passed from PlanPage
+
+  const PlanPage1({super.key, required this.location});
 
   @override
   State<PlanPage1> createState() => _PlanPage1State();
@@ -39,21 +41,25 @@ class _PlanPage1State extends State<PlanPage1> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            const SizedBox(height: 20.0),
+            Center(
+              child: AppLargeText(
+                text: 'Planning a trip to ${widget.location}!', // Display the location here
+                size: 18,
+              ),
+            ),
+            const SizedBox(height: 16.0),
             Center(
               child: AppLargeText(
                 text: 'When do you plan to visit?',
               ),
             ),
-            const SizedBox(
-              height: 16,
-            ),
+            const SizedBox(height: 16.0),
             const Text(
               'Choose a date range',
               style: TextStyle(fontSize: 16),
             ),
-            const SizedBox(
-              height: 46,
-            ),
+            const SizedBox(height: 46.0),
             GestureDetector(
               onTap: () => _selectDateRange(context),
               child: Container(
@@ -69,16 +75,14 @@ class _PlanPage1State extends State<PlanPage1> {
                       _selectedDateRange == null
                           ? 'Select Date Range'
                           : '${DateFormat('dd/MM/yyyy').format(_selectedDateRange!.start)} - ${DateFormat('dd/MM/yyyy').format(_selectedDateRange!.end)}',
-                      style: TextStyle(fontSize: 16),
+                      style: const TextStyle(fontSize: 16),
                     ),
-                    Icon(Icons.calendar_today),
+                    const Icon(Icons.calendar_today),
                   ],
                 ),
               ),
             ),
-            const SizedBox(
-              height: 16,
-            ),
+            const SizedBox(height: 16.0),
             if (_selectedDateRange != null)
               AppText(
                 text: 'Total days: $_totalDays',
@@ -94,7 +98,11 @@ class _PlanPage1State extends State<PlanPage1> {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                        builder: (context) => const PlanPage2()),
+                      builder: (context) => PlanPage2(
+                        location: widget.location,
+                        selectedDateRange: _selectedDateRange!, // Use null assertion operator
+                      ),
+                    ),
                   );
                 },
                 child: const Text('Next'),
@@ -109,7 +117,7 @@ class _PlanPage1State extends State<PlanPage1> {
                 ),
               ),
             ),
-            const SizedBox(height: 16),
+            const SizedBox(height: 16.0),
           ],
         ),
       ),

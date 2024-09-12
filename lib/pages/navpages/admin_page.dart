@@ -9,6 +9,7 @@ import '../admin/review.dart';
 import '../admin/transport.dart';
 import '../admin/trip.dart';
 import '../admin/user.dart';
+import '../navpages/upload_data_page.dart';
 
 class AdminPage extends StatelessWidget {
   const AdminPage({Key? key}) : super(key: key);
@@ -99,6 +100,15 @@ class AdminPage extends StatelessWidget {
               Navigator.push(
                 context,
                 MaterialPageRoute(builder: (context) => ManageHotelsPage()),
+              );
+            },
+          ),
+          AdminLinkTile(
+            title: 'upload',
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => UploadDataPage()),
               );
             },
           ),

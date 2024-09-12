@@ -1,10 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:tripwise/pages/navpages/planpages/plan_page_3.dart';
 import 'package:tripwise/widgets/app_large_text.dart';
-import 'package:tripwise/widgets/app_text.dart';
 
 class PlanPage2 extends StatefulWidget {
-  const PlanPage2({super.key});
+  final String location; // Accept location from PlanPage1
+  final DateTimeRange selectedDateRange; // Accept date range from PlanPage1
+
+  const PlanPage2({
+    Key? key,
+    required this.location,
+    required this.selectedDateRange,
+  }) : super(key: key);
 
   @override
   State<PlanPage2> createState() => _PlanPage2State();
@@ -45,19 +52,32 @@ class _PlanPage2State extends State<PlanPage2> {
             const SizedBox(
               height: 16,
             ),
+            // Display location and selected date range
+            Text(
+              'Location: ${widget.location}',
+              style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+            ),
+            const SizedBox(height: 8),
+            Text(
+              'Selected Date Range: ${DateFormat('dd/MM/yyyy').format(widget.selectedDateRange.start)} - ${DateFormat('dd/MM/yyyy').format(widget.selectedDateRange.end)}',
+              style: const TextStyle(fontSize: 16),
+            ),
+            const SizedBox(height: 32),
             const Text(
-              'Choose one.',
+              'Choose one:',
               style: TextStyle(fontSize: 16),
             ),
             const SizedBox(
-              height: 46,
+              height: 32,
             ),
             Container(
-              height: 200, // Fixed height for GridView
+              height: 180,
               child: GridView.count(
                 crossAxisCount: 2,
                 crossAxisSpacing: 8,
                 mainAxisSpacing: 8,
+                childAspectRatio: 1.4,
+                physics: const NeverScrollableScrollPhysics(),
                 children: [
                   SelectableCard(
                     icon: Icons.person,
@@ -74,43 +94,48 @@ class _PlanPage2State extends State<PlanPage2> {
                 ],
               ),
             ),
-            if (_selectedOption == 'Family and Friends') // Show only if Family and Friends is selected
+            if (_selectedOption == 'Family and Friends')
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const SizedBox(
-                    height: 16,
+                  const SizedBox(height: 16),
+                  const Text(
+                    'Are you traveling with children?',
+                    style: TextStyle(fontSize: 18),
                   ),
-                  AppText(
-                    text: 'Are you traveling with children?',
-                    size: 18,
-                  ),
-                  const SizedBox(
-                    height: 16,
-                  ),
+                  const SizedBox(height: 16),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      OutlinedButton(
-                        onPressed: () => _selectTravelWithChildren('Yes'),
-                        child: const Text('Yes'),
-                        style: OutlinedButton.styleFrom(
-                          padding: const EdgeInsets.symmetric(horizontal: 40),
-                          backgroundColor:
-                          _travelWithChildren == 'Yes' ? Colors.blue : Colors.transparent,
-                          disabledBackgroundColor:
-                          _travelWithChildren == 'Yes' ? Colors.white : Colors.black,
+                      Expanded(
+                        child: OutlinedButton(
+                          onPressed: () => _selectTravelWithChildren('Yes'),
+                          child: const Text('Yes'),
+                          style: OutlinedButton.styleFrom(
+                            padding: const EdgeInsets.symmetric(vertical: 12),
+                            backgroundColor: _travelWithChildren == 'Yes'
+                                ? Colors.blue
+                                : Colors.transparent,
+                            foregroundColor: _travelWithChildren == 'Yes'
+                                ? Colors.white
+                                : Colors.black,
+                          ),
                         ),
                       ),
-                      OutlinedButton(
-                        onPressed: () => _selectTravelWithChildren('No'),
-                        child: const Text('No'),
-                        style: OutlinedButton.styleFrom(
-                          padding: const EdgeInsets.symmetric(horizontal: 40),
-                          backgroundColor:
-                          _travelWithChildren == 'No' ? Colors.blue : Colors.transparent,
-                          disabledBackgroundColor:
-                          _travelWithChildren == 'No' ? Colors.white : Colors.black,
+                      const SizedBox(width: 16),
+                      Expanded(
+                        child: OutlinedButton(
+                          onPressed: () => _selectTravelWithChildren('No'),
+                          child: const Text('No'),
+                          style: OutlinedButton.styleFrom(
+                            padding: const EdgeInsets.symmetric(vertical: 12),
+                            backgroundColor: _travelWithChildren == 'No'
+                                ? Colors.blue
+                                : Colors.transparent,
+                            foregroundColor: _travelWithChildren == 'No'
+                                ? Colors.white
+                                : Colors.black,
+                          ),
                         ),
                       ),
                     ],
@@ -121,12 +146,18 @@ class _PlanPage2State extends State<PlanPage2> {
             Center(
               child: ElevatedButton(
                 onPressed: _selectedOption != null &&
-                    (_selectedOption != 'Family and Friends' || _travelWithChildren != null)
+                    (_selectedOption != 'Family and Friends' ||
+                        _travelWithChildren != null)
                     ? () {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => const PlanPage3(),
+                      builder: (context) => PlanPage3(
+                        location: widget.location, // Pass location to PlanPage3
+                        selectedDateRange: widget.selectedDateRange, // Pass date range to PlanPage3
+                        selectedOption: _selectedOption!, // Pass the selected option
+                        travelWithChildren: _travelWithChildren, // Pass the travel with children option
+                      ),
                     ),
                   );
                 }
