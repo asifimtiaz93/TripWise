@@ -31,11 +31,11 @@ class _PreferencesPageState extends State<PreferencesPage> {
         DocumentSnapshot userDoc = await FirebaseFirestore.instance.collection('User').doc(user.uid).get();
         if (userDoc.exists) {
           setState(() {
-            _adventureSports = userDoc['AdventureSports'] ?? false;
+            _adventureSports = userDoc['Adventure Sports'] ?? false;
             _beaches = userDoc['Beaches'] ?? false;
             _cities = userDoc['Cities'] ?? false;
-            _culturalSites = userDoc['CulturalSites'] ?? false;
-            _historicalPlaces = userDoc['HistoricalPlaces'] ?? false;
+            _culturalSites = userDoc['Cultural Sites'] ?? false;
+            _historicalPlaces = userDoc['Historical Places'] ?? false;
             _mountains = userDoc['Mountains'] ?? false;
             _relationshipStatus = userDoc['RelationshipStatus'] ?? 'Single';
           });

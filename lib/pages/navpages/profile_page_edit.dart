@@ -59,26 +59,32 @@ class _ProfilePageEditState extends State<ProfilePageEdit> {
           .ref()
           .child('userProfilePictures')
           .child('${widget.user!.uid}.jpg');
+
+      // Upload the file to Firebase Storage
       await storageRef.putFile(File(pickedFile.path));
+
+      // Get the download URL of the uploaded file
       final downloadURL = await storageRef.getDownloadURL();
 
-      // Update the user profile
+      // Update the user profile photo in Firebase Auth
       await widget.user!.updatePhotoURL(downloadURL);
 
-      // Update Firestore
+      // Now update the Firestore 'User' document with the download URL
       await FirebaseFirestore.instance.collection('User').doc(widget.user!.uid).update({
-        'ProfilePicture': downloadURL,
+        'ProfilePicture': downloadURL, // Update Firestore with the new profile picture URL
       });
 
       setState(() {
-        // Trigger UI update
+        // Trigger UI update after changing the profile picture
       });
 
+      // Show a success message
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('Profile picture updated successfully')),
       );
     }
   }
+
 
   Future<void> _updateProfile() async {
     User? user = widget.user;

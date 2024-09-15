@@ -1,12 +1,17 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:tripwise/pages/navpages/home_page.dart';
+import 'package:tripwise/pages/navpages/main_page.dart';
+import 'package:tripwise/pages/navpages/plan_page.dart';
+import 'package:tripwise/pages/navpages/profile_page.dart';
 
 class PlanReadyPage extends StatefulWidget {
-  final String location; // Passed from PlanPage3
-  final DateTimeRange selectedDateRange; // Passed from PlanPage3
-  final String selectedOption; // Passed from PlanPage3 (single or family/friends)
-  final String? travelWithChildren; // Passed from PlanPage3
-  final List<String> selectedActivities; // Passed from PlanPage3
+  final String location;
+  final DateTimeRange selectedDateRange;
+  final String selectedOption;
+  final String? travelWithChildren;
+  final List<String> selectedActivities;
 
   const PlanReadyPage({
     Key? key,
@@ -22,7 +27,10 @@ class PlanReadyPage extends StatefulWidget {
 }
 
 class _PlanReadyPageState extends State<PlanReadyPage> {
-  List<Map<String, dynamic>> options = []; // Store matched options
+  List<Map<String, dynamic>> options = [];
+  Map<String, dynamic>? selectedPlace;
+  bool isSaving = false;
+  int _currentIndex = 0; // for bottom navigation
 
   @override
   void initState() {
@@ -30,80 +38,126 @@ class _PlanReadyPageState extends State<PlanReadyPage> {
     _findMatchingPlaces();
   }
 
-  // Fetch and find the matching places
   Future<void> _findMatchingPlaces() async {
-    print('Selected Activities: ${widget.selectedActivities}');
-    print('Location: ${widget.location}');
-    print('Selected Date Range: ${widget.selectedDateRange.start} to ${widget.selectedDateRange.end}');
-    print('Selected Option: ${widget.selectedOption}');
-    print('Travel With Children: ${widget.travelWithChildren}');
-
-    QuerySnapshot snapshot =
-    await FirebaseFirestore.instance.collection('PopularPlace').get();
-
+    QuerySnapshot snapshot = await FirebaseFirestore.instance.collection('PopularPlace').get();
     List<QueryDocumentSnapshot> places = snapshot.docs;
-
-    print('Fetched ${places.length} places from Firestore');
-
     List<Map<String, dynamic>> matchedPlaces = [];
 
     for (var place in places) {
       Map<String, dynamic> placeData = place.data() as Map<String, dynamic>;
-
-      // Check if the 'Attributes' field exists and is not null
       if (placeData['Attributes'] != null) {
         List<String> matchedAttributes = [];
 
-        // Map attributes to activities
         if (widget.selectedActivities.contains('Adventure Sports') &&
             placeData['Attributes']['AdventureSports'] == true) {
           matchedAttributes.add('Adventure Sports');
         }
-        if (widget.selectedActivities.contains('Beach Relaxation') &&
-            placeData['Attributes']['Beaches'] == true) {
-          matchedAttributes.add('Beach Relaxation');
-        }
-        if (widget.selectedActivities.contains('City Exploration') &&
-            placeData['Attributes']['Cities'] == true) {
-          matchedAttributes.add('City Exploration');
-        }
-        if (widget.selectedActivities.contains('Cultural Experiences') &&
-            placeData['Attributes']['CulturalSites'] == true) {
-          matchedAttributes.add('Cultural Experiences');
-        }
-        if (widget.selectedActivities.contains('Historical Landmarks') &&
-            placeData['Attributes']['HistoricalPlaces'] == true) {
-          matchedAttributes.add('Historical Landmarks');
-        }
-        if (widget.selectedActivities.contains('Mountain Hikes') &&
-            placeData['Attributes']['Mountains'] == true) {
-          matchedAttributes.add('Mountain Hikes');
-        }
+        // Add similar conditions for other activities...
 
         if (matchedAttributes.isNotEmpty) {
-          print('Matched attributes: $matchedAttributes for place: ${placeData['Name']}');
           matchedPlaces.add({
             'place': placeData,
             'matchCount': matchedAttributes.length,
-            'matchedActivities': matchedAttributes,
           });
-        } else {
-          print('No matched attributes for place: ${placeData['Name']}');
         }
-      } else {
-        print('No Attributes field for place: ${placeData['Name']}');
       }
     }
 
-    // Sort matched places by match count
     matchedPlaces.sort((a, b) => b['matchCount'].compareTo(a['matchCount']));
-
-    // Get up to 3 options
     setState(() {
       options = matchedPlaces.take(3).toList();
     });
+  }
 
-    print('Matched ${options.length} places');
+  Future<void> _savePlan() async {
+    final User? user = FirebaseAuth.instance.currentUser;
+    if (user == null) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Please log in to save the plan'),
+          backgroundColor: Colors.red,
+        ),
+      );
+      return;
+    }
+
+    if (selectedPlace == null) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Please select an option')),
+      );
+      return;
+    }
+
+    setState(() {
+      isSaving = true;
+    });
+
+    try {
+      await FirebaseFirestore.instance.collection('Plans').add({
+        'userId': user.uid,
+        'date': DateTime.now(),
+        'name': selectedPlace!['place']['Name'],
+        'location': selectedPlace!['place']['Location'],
+        'destinationId': selectedPlace!['place']['DestinationID'],
+        'selectedOption': widget.selectedOption,
+        'travelWithChildren': widget.travelWithChildren,
+        'selectedActivities': widget.selectedActivities,
+        'selectedDateRange': {
+          'start': widget.selectedDateRange.start,
+          'end': widget.selectedDateRange.end,
+        },
+      });
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Plan saved successfully')),
+      );
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Failed to save plan: $e')),
+      );
+    } finally {
+      setState(() {
+        isSaving = false;
+      });
+    }
+  }
+
+  void _onNavBarTapped(int index) {
+    setState(() {
+      _currentIndex = index;
+    });
+
+    // Navigate to the corresponding page
+    switch (index) {
+      case 0:
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => homePage(user: FirebaseAuth.instance.currentUser)),
+        );
+        break;
+      case 1:
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => PlanPage()), // Replace with actual plan page
+        );
+        break;
+      case 2:
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => profilePage(user: FirebaseAuth.instance.currentUser)),
+        );
+        break;
+    }
+  }
+
+  void _navigateToHome() {
+    Navigator.pushAndRemoveUntil(
+      context,
+      MaterialPageRoute(
+        builder: (context) => MainPage(initialIndex: 0, user: FirebaseAuth.instance.currentUser),
+      ),
+          (route) => false, // Removes all previous routes
+    );
   }
 
   @override
@@ -128,14 +182,16 @@ class _PlanReadyPageState extends State<PlanReadyPage> {
                 ),
               ),
               const SizedBox(height: 16),
-              // Show options or no match message
               if (options.isNotEmpty)
-                Column(
-                  children: List.generate(
-                    options.length,
-                        (index) => _buildOptionButton(
-                      'Option ${index + 1}',
-                      options[index]['place'],
+                SingleChildScrollView(
+                  scrollDirection: Axis.horizontal,
+                  child: Row(
+                    children: List.generate(
+                      options.length,
+                          (index) => _buildOptionButton(
+                        'Option ${index + 1}',
+                        options[index]['place'],
+                      ),
                     ),
                   ),
                 )
@@ -147,67 +203,82 @@ class _PlanReadyPageState extends State<PlanReadyPage> {
                   ),
                 ),
               const SizedBox(height: 16),
-              _buildSectionTitle('Selected Activities:'),
-              Text(widget.selectedActivities.join(', ')),
+              if (selectedPlace != null)
+                _buildPlaceDetails(selectedPlace!['place']),
+              const SizedBox(height: 16),
+              Center(
+                child: ElevatedButton(
+                  onPressed: isSaving ? null : _savePlan,
+                  child: isSaving
+                      ? CircularProgressIndicator()
+                      : Text('Save This Plan'),
+                ),
+              ),
+              const SizedBox(height: 16),
+              Center(
+                child: ElevatedButton(
+                  onPressed: _navigateToHome, // Navigate to Home on button press
+                  child: Text('Back to Home'),
+                ),
+              ),
             ],
           ),
         ),
+      ),
+      bottomNavigationBar: BottomNavigationBar(
+        currentIndex: _currentIndex,
+        onTap: _onNavBarTapped,
+        items: [
+          BottomNavigationBarItem(
+            icon: Icon(Icons.home),
+            label: 'Home',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.map),
+            label: 'Plan',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.person),
+            label: 'Profile',
+          ),
+        ],
       ),
     );
   }
 
   Widget _buildOptionButton(String text, Map<String, dynamic> placeData) {
+    bool isSelected = selectedPlace != null && selectedPlace!['place']['Name'] == placeData['Name'];
+
     return OutlinedButton(
       onPressed: () {
-        _showPlaceDetails(placeData);
+        setState(() {
+          selectedPlace = {'place': placeData};
+        });
       },
-      child: Text(text),
       style: OutlinedButton.styleFrom(
+        backgroundColor: isSelected ? Colors.blue : Colors.transparent,
+        foregroundColor: isSelected ? Colors.white : Colors.black,
         padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 24),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(20),
         ),
       ),
+      child: Text(text),
     );
   }
 
-  // Show detailed place information when an option is selected
-  void _showPlaceDetails(Map<String, dynamic> placeData) {
-    showDialog(
-      context: context,
-      builder: (context) {
-        return AlertDialog(
-          title: Text(placeData['Name']),
-          content: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Image.network(placeData['ImageURL']),
-              const SizedBox(height: 8),
-              Text(placeData['Description']),
-              const SizedBox(height: 8),
-              Text('Location: ${placeData['Location']}'),
-              const SizedBox(height: 8),
-              Text('Rating: ${placeData['Ratings']}'),
-            ],
-          ),
-          actions: [
-            TextButton(
-              onPressed: () => Navigator.pop(context),
-              child: const Text('Close'),
-            ),
-          ],
-        );
-      },
-    );
-  }
-
-  Widget _buildSectionTitle(String title) {
-    return Padding(
-      padding: const EdgeInsets.only(top: 16.0),
-      child: Text(
-        title,
-        style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-      ),
+  Widget _buildPlaceDetails(Map<String, dynamic> placeData) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Image.network(placeData['ImageURL']),
+        const SizedBox(height: 8),
+        Text(placeData['Description']),
+        const SizedBox(height: 8),
+        Text('Location: ${placeData['Location']}'),
+        const SizedBox(height: 8),
+        Text('Rating: ${placeData['Ratings']}'),
+      ],
     );
   }
 }

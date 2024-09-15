@@ -78,7 +78,28 @@ class _MainPageState extends State<MainPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(),
+      appBar: AppBar(
+        backgroundColor: Colors.white, // Set the app bar background to white
+        elevation: 0, // Remove shadow
+        title: Row(
+          children: [
+            Image.asset(
+              'assets/logo.png', // Add your logo here
+              height: 80,
+              width: 80,
+            ),
+            SizedBox(width: 0), // Add some spacing between logo and text
+            Text(
+              'TripWise',
+              style: TextStyle(
+                color: Colors.black, // Set the text color to black
+                fontSize: 30,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ],
+        ),
+      ),
       drawer: Drawer(
         child: ListView(
           padding: EdgeInsets.zero,
@@ -146,16 +167,16 @@ class _MainPageState extends State<MainPage> {
               onTap: () => onDrawerTapped(13),
             ),
           ],
-
         ),
       ),
       body: pages[selectedIndex],
       bottomNavigationBar: BottomNavigationBar(
         type: BottomNavigationBarType.fixed,
+        backgroundColor: Colors.white, // Set bottom nav background to white
         currentIndex: bottomNavBarPageMapping.entries
             .firstWhere((entry) => entry.value == selectedIndex, orElse: () => const MapEntry(0, 0))
             .key,
-        selectedItemColor: Colors.black54,
+        selectedItemColor: Colors.black,
         unselectedItemColor: Colors.black38,
         elevation: 2,
         showSelectedLabels: true,

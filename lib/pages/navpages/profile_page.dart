@@ -3,7 +3,9 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:tripwise/pages/navpages/preference_page.dart';
 import 'package:tripwise/pages/navpages/profile_page_edit.dart';
+import 'package:tripwise/pages/navpages/saved_plans.dart';
 import 'package:tripwise/pages/navpages/settings_page.dart';
+import 'package:tripwise/pages/navpages/signin.dart'; // Import the sign-in page to navigate after logout
 
 class profilePage extends StatelessWidget {
   final User? user;
@@ -14,6 +16,15 @@ class profilePage extends StatelessWidget {
     if (user == null) return null;
     DocumentSnapshot userDoc = await FirebaseFirestore.instance.collection('User').doc(user!.uid).get();
     return userDoc.data() as Map<String, dynamic>?;
+  }
+
+  Future<void> _logout(BuildContext context) async {
+    await FirebaseAuth.instance.signOut();
+    Navigator.pushAndRemoveUntil(
+      context,
+      MaterialPageRoute(builder: (context) => SignInPage()), // Navigate to sign-in page
+          (Route<dynamic> route) => false, // Clear navigation stack
+    );
   }
 
   @override
@@ -65,13 +76,14 @@ class profilePage extends StatelessWidget {
             child: Column(
               children: [
                 SizedBox(height: 20),
-                //profile picture
+                // Profile picture
                 CircleAvatar(
                   radius: 50,
                   backgroundImage: user?.photoURL != null
                       ? NetworkImage(user!.photoURL!)
                       : AssetImage('assets/profile.jpg') as ImageProvider,
                 ),
+
                 SizedBox(height: 10),
                 Text(
                   name,
@@ -89,52 +101,7 @@ class profilePage extends StatelessWidget {
                   ),
                 ),
                 SizedBox(height: 20),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    Column(
-                      children: [
-                        Text(
-                          rewardPoints.toString(),
-                          style: TextStyle(
-                            fontSize: 18,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                        SizedBox(height: 5),
-                        Text('Reward Points'),
-                      ],
-                    ),
-                    Column(
-                      children: [
-                        Text(
-                          travelTrips.toString(),
-                          style: TextStyle(
-                            fontSize: 18,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                        SizedBox(height: 5),
-                        Text('Travel Trips'),
-                      ],
-                    ),
-                    Column(
-                      children: [
-                        Text(
-                          bucketList.toString(),
-                          style: TextStyle(
-                            fontSize: 18,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                        SizedBox(height: 5),
-                        Text('Bucket List'),
-                      ],
-                    ),
-                  ],
-                ),
-                SizedBox(height: 20),
-                Divider(),
+
                 ListTile(
                   leading: Icon(Icons.settings),
                   title: Text('Preferences'),
@@ -147,16 +114,19 @@ class profilePage extends StatelessWidget {
                 ),
                 ListTile(
                   leading: Icon(Icons.bookmark_border),
-                  title: Text('Bookmarked'),
+                  title: Text('Booking History'),
                   onTap: () {
                     // Implement navigation to bookmarked page
                   },
                 ),
                 ListTile(
                   leading: Icon(Icons.history),
-                  title: Text('Previous Trips'),
+                  title: Text('Saved Plans'),
                   onTap: () {
-                    // Implement navigation to previous trips page
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => SavedPlansPage()),
+                    );
                   },
                 ),
                 ListTile(
@@ -175,6 +145,20 @@ class profilePage extends StatelessWidget {
                   onTap: () {
                     // Implement navigation to version information page
                   },
+                ),
+                SizedBox(height: 20),
+                // Logout button
+                Center(
+                  child: ElevatedButton(
+                    onPressed: () => _logout(context), // Call logout function
+                    child: Text('Logout'),
+                    style: ElevatedButton.styleFrom(
+                      padding: EdgeInsets.symmetric(horizontal: 40, vertical: 12),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(25.0),
+                      ),
+                    ),
+                  ),
                 ),
               ],
             ),

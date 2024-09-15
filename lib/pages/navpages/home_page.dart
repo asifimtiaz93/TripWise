@@ -3,8 +3,6 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:tripwise/pages/navpages/place_detail_page.dart';
-import 'package:tripwise/pages/navpages/popular_places.dart';
-import 'main_page.dart';
 
 class homePage extends StatefulWidget {
   final User? user;
@@ -16,21 +14,21 @@ class homePage extends StatefulWidget {
 }
 
 class _homePageState extends State<homePage> {
-  String userName = '';
+  String userName = 'Guest'; // Set default username to "Guest"
 
   @override
   void initState() {
     super.initState();
-    _fetchUserName();
+    _fetchUserName(); // Fetch user name
   }
 
   Future<void> _fetchUserName() async {
-    if (widget.user != null) {
-      DocumentSnapshot userDoc = await FirebaseFirestore.instance.collection(
-          'User').doc(widget.user!.uid).get();
+    final user = FirebaseAuth.instance.currentUser;
+
+    if (user != null) {
+      DocumentSnapshot userDoc = await FirebaseFirestore.instance.collection('User').doc(user.uid).get();
       if (userDoc.exists) {
-        Map<String, dynamic>? userData = userDoc.data() as Map<String,
-            dynamic>?;
+        Map<String, dynamic>? userData = userDoc.data() as Map<String, dynamic>?;
         if (userData != null) {
           setState(() {
             userName = userData['Name'] ?? 'Guest';
@@ -38,12 +36,12 @@ class _homePageState extends State<homePage> {
         }
       } else {
         setState(() {
-          userName = widget.user?.displayName ?? 'Guest';
+          userName = user.displayName ?? 'Guest';
         });
       }
     } else {
       setState(() {
-        userName = 'Guest';
+        userName = 'Guest'; // If no user is logged in, show "Guest"
       });
     }
   }
@@ -51,7 +49,6 @@ class _homePageState extends State<homePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-
       backgroundColor: Colors.white,
       body: SingleChildScrollView(
         child: Padding(
@@ -152,8 +149,7 @@ class _homePageState extends State<homePage> {
               SizedBox(
                 height: 250,
                 child: StreamBuilder<QuerySnapshot>(
-                  stream: FirebaseFirestore.instance.collection('PopularPlace')
-                      .snapshots(),
+                  stream: FirebaseFirestore.instance.collection('PopularPlace').snapshots(),
                   builder: (context, snapshot) {
                     if (snapshot.connectionState == ConnectionState.waiting) {
                       return Center(child: CircularProgressIndicator());
@@ -169,15 +165,12 @@ class _homePageState extends State<homePage> {
                       return Center(child: Text('No popular places found.'));
                     }
 
-                    print("Total popular places found: ${snapshot.data!.docs
-                        .length}");
+                    print("Total popular places found: ${snapshot.data!.docs.length}");
 
                     return ListView(
                       scrollDirection: Axis.horizontal,
                       children: snapshot.data!.docs.map((doc) {
-                        Map<String, dynamic> data = doc.data() as Map<
-                            String,
-                            dynamic>;
+                        Map<String, dynamic> data = doc.data() as Map<String, dynamic>;
                         if (data.isEmpty) {
                           print("Empty data for doc: ${doc.id}");
                           return SizedBox.shrink();
@@ -186,22 +179,16 @@ class _homePageState extends State<homePage> {
                         return _buildPopularPlaceCard(
                           context,
                           placeId: doc.id,
-                          // Pass the document ID as placeId
                           image: data['ImageURL'],
-                          // Use the ImageURL from Firestore
                           title: data['Name'],
-                          // Popular place name
                           location: data['Location'],
-                          // Popular place location
-                          rating: double.tryParse(data['Ratings'].toString()) ??
-                              0.0, // Parse the rating safely
+                          rating: double.tryParse(data['Ratings'].toString()) ?? 0.0,
                         );
                       }).toList(),
                     );
                   },
                 ),
               ),
-
             ],
           ),
         ),
@@ -210,7 +197,7 @@ class _homePageState extends State<homePage> {
   }
 
   Widget _buildPopularPlaceCard(BuildContext context, {
-    required String placeId, // Add placeId as a parameter
+    required String placeId,
     required String image,
     required String title,
     required String location,
@@ -221,8 +208,7 @@ class _homePageState extends State<homePage> {
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) => PlaceDetailPage(
-                placeId: placeId), // Pass placeId to PlaceDetailPage
+            builder: (context) => PlaceDetailPage(placeId: placeId),
           ),
         );
       },
@@ -233,7 +219,6 @@ class _homePageState extends State<homePage> {
           borderRadius: BorderRadius.circular(16),
           image: DecorationImage(
             image: NetworkImage(image),
-            // Use NetworkImage to load image from URL
             fit: BoxFit.cover,
           ),
         ),
