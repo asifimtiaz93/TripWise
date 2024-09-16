@@ -23,7 +23,7 @@ class _SearchPageState extends State<SearchPage> {
         leading: IconButton(
           icon: const Icon(Icons.arrow_back, color: Colors.black),
           onPressed: () {
-            Navigator.pop(context); // Back navigation
+            Navigator.of(context).pop(); // Ensure Navigator is used properly
           },
         ),
         title: Text(

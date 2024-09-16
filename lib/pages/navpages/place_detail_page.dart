@@ -53,9 +53,6 @@ class _PlaceDetailPageState extends State<PlaceDetailPage> {
                 // Place Information Section
                 _buildPlaceInfo(name, location, rating, description),
 
-                // Explore Area Section (Map Placeholder)
-                _buildExploreArea(),
-
                 // Traveler Insights and Reviews Section
                 _buildReviewsAndInsights(),
               ],
@@ -113,26 +110,6 @@ class _PlaceDetailPageState extends State<PlaceDetailPage> {
     );
   }
 
-  // Widget to build the explore area section (Map Placeholder)
-  Widget _buildExploreArea() {
-    return Padding(
-      padding: const EdgeInsets.all(16.0),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text("Explore the Area", style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
-          SizedBox(height: 8),
-          // Placeholder for Map Widget
-          Container(
-            height: 150,
-            color: Colors.grey[200],
-            child: Center(child: Text("Map goes here")),
-          ),
-        ],
-      ),
-    );
-  }
-
   // Widget to build the reviews and insights section
   Widget _buildReviewsAndInsights() {
     return Padding(
@@ -157,12 +134,12 @@ class _PlaceDetailPageState extends State<PlaceDetailPage> {
 
   // Method to fetch and display user reviews
   Widget _buildUserReviews() {
-    return FutureBuilder<QuerySnapshot>(
-      future: FirebaseFirestore.instance
+    return StreamBuilder<QuerySnapshot>(
+      stream: FirebaseFirestore.instance
           .collection('Review')
           .where('placeId', isEqualTo: widget.placeId)
           .orderBy('date', descending: true)
-          .get(),
+          .snapshots(), // Use StreamBuilder to get live updates
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return Center(child: CircularProgressIndicator());
@@ -180,31 +157,46 @@ class _PlaceDetailPageState extends State<PlaceDetailPage> {
             var data = doc.data() as Map<String, dynamic>;
             var review = data['review'] ?? '';
             var date = (data['date'] as Timestamp).toDate();
-            return Padding(
-              padding: const EdgeInsets.symmetric(vertical: 8.0),
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  CircleAvatar(
-                    child: Icon(Icons.person),
-                    radius: 20,
-                  ),
-                  SizedBox(width: 10),
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(review, style: TextStyle(fontSize: 16)),
-                        SizedBox(height: 4),
-                        Text(
-                          'Posted on ${date.toString().split(' ')[0]}',
-                          style: TextStyle(color: Colors.grey, fontSize: 12),
+            var userId = data['userId'] ?? '';
+
+            return FutureBuilder<DocumentSnapshot>(
+              future: FirebaseFirestore.instance.collection('User').doc(userId).get(),
+              builder: (context, userSnapshot) {
+                if (!userSnapshot.hasData || !userSnapshot.data!.exists) {
+                  return SizedBox.shrink(); // No user data, don't display review
+                }
+
+                var userData = userSnapshot.data!;
+                var userName = userData['Name'] ?? 'Anonymous';
+
+                return Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 8.0),
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      CircleAvatar(
+                        child: Icon(Icons.person),
+                        radius: 20,
+                      ),
+                      SizedBox(width: 10),
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(userName, style: TextStyle(fontWeight: FontWeight.bold)),
+                            Text(review, style: TextStyle(fontSize: 16)),
+                            SizedBox(height: 4),
+                            Text(
+                              'Posted on ${date.toString().split(' ')[0]}',
+                              style: TextStyle(color: Colors.grey, fontSize: 12),
+                            ),
+                          ],
                         ),
-                      ],
-                    ),
+                      ),
+                    ],
                   ),
-                ],
-              ),
+                );
+              },
             );
           }).toList(),
         );

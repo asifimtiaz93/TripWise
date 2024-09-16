@@ -20,6 +20,7 @@ class _SignInPageState extends State<SignInPage> {
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
   bool _isLoading = false;
+  bool _obscurePassword = true; // State variable for password visibility
 
   @override
   void initState() {
@@ -111,7 +112,7 @@ class _SignInPageState extends State<SignInPage> {
         leading: IconButton(
           icon: Icon(Icons.arrow_back, color: Colors.black),
           onPressed: () {
-            // Implement back navigation
+            Navigator.pop(context); // Implement back navigation
           },
         ),
       ),
@@ -150,14 +151,18 @@ class _SignInPageState extends State<SignInPage> {
             SizedBox(height: 20),
             TextField(
               controller: _passwordController,
-              obscureText: true,
+              obscureText: _obscurePassword, // Use state variable
               decoration: InputDecoration(
                 labelText: 'Password',
                 border: OutlineInputBorder(),
                 suffixIcon: IconButton(
-                  icon: Icon(Icons.visibility),
+                  icon: Icon(
+                    _obscurePassword ? Icons.visibility : Icons.visibility_off,
+                  ),
                   onPressed: () {
-                    // Implement password visibility toggle
+                    setState(() {
+                      _obscurePassword = !_obscurePassword; // Toggle visibility
+                    });
                   },
                 ),
               ),

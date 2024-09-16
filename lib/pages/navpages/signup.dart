@@ -16,8 +16,9 @@ class _SignUpPageState extends State<SignUpPage> {
   final _nameController = TextEditingController();
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
-  final DatabaseHelper dbHelper = DatabaseHelper(); // Initialize the database helper
+  final DatabaseHelper dbHelper = DatabaseHelper();
   bool _isLoading = false;
+  bool _isPasswordVisible = false; // New state variable
 
   void _signUp() async {
     if (_formKey.currentState!.validate()) {
@@ -43,7 +44,7 @@ class _SignUpPageState extends State<SignUpPage> {
           'UserID': user.uid,
           'Name': _nameController.text,
           'Email': _emailController.text,
-          'Password': _passwordController.text, // Note: Storing plaintext passwords is not recommended
+          'Password': _passwordController.text,
           'ProfilePicture': user.photoURL ?? '',
           'RewardPoints': 0,
           'TravelTrips': 0,
@@ -58,7 +59,6 @@ class _SignUpPageState extends State<SignUpPage> {
           'TravelBudget': preferences['TravelBudget'] ?? '',
         });
 
-        // Clear local preferences after saving to Firestore
         await dbHelper.clearPreferences();
 
         Navigator.pop(context);
@@ -158,14 +158,18 @@ class _SignUpPageState extends State<SignUpPage> {
               SizedBox(height: 20),
               TextFormField(
                 controller: _passwordController,
-                obscureText: true,
+                obscureText: !_isPasswordVisible, // Toggle visibility
                 decoration: InputDecoration(
                   labelText: 'Password',
                   border: OutlineInputBorder(),
                   suffixIcon: IconButton(
-                    icon: Icon(Icons.visibility),
+                    icon: Icon(
+                      _isPasswordVisible ? Icons.visibility : Icons.visibility_off,
+                    ),
                     onPressed: () {
-                      // Implement password visibility toggle
+                      setState(() {
+                        _isPasswordVisible = !_isPasswordVisible; // Toggle the state
+                      });
                     },
                   ),
                 ),
@@ -207,7 +211,6 @@ class _SignUpPageState extends State<SignUpPage> {
                     Text('Already have an account?'),
                     TextButton(
                       onPressed: () {
-                        // Implement sign-in navigation
                         Navigator.pop(context);
                       },
                       child: Text(

@@ -1,12 +1,13 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:tripwise/pages/navpages/booking_history.dart';
 import 'package:tripwise/pages/navpages/preference_page.dart';
 import 'package:tripwise/pages/navpages/profile_page_edit.dart';
 import 'package:tripwise/pages/navpages/saved_plans.dart';
 import 'package:tripwise/pages/navpages/settings_page.dart';
 import 'package:tripwise/pages/navpages/signin.dart'; // Import the sign-in page to navigate after logout
-
+import 'package:tripwise/pages/navpages/booking_history.dart';
 class profilePage extends StatelessWidget {
   final User? user;
 
@@ -26,7 +27,13 @@ class profilePage extends StatelessWidget {
           (Route<dynamic> route) => false, // Clear navigation stack
     );
   }
-
+  void _showVersionSnackBar(BuildContext context) {
+    final snackBar = SnackBar(
+      content: Text('Version: 12.1.2'),
+      duration: Duration(seconds: 2),
+    );
+    ScaffoldMessenger.of(context).showSnackBar(snackBar);
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -116,7 +123,10 @@ class profilePage extends StatelessWidget {
                   leading: Icon(Icons.bookmark_border),
                   title: Text('Booking History'),
                   onTap: () {
-                    // Implement navigation to bookmarked page
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => BookingHistoryPage()),
+                    );
                   },
                 ),
                 ListTile(
@@ -129,21 +139,12 @@ class profilePage extends StatelessWidget {
                     );
                   },
                 ),
-                ListTile(
-                  leading: Icon(Icons.settings),
-                  title: Text('Settings'),
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => SettingsPage()),
-                    );
-                  },
-                ),
+
                 ListTile(
                   leading: Icon(Icons.info_outline),
                   title: Text('Version'),
                   onTap: () {
-                    // Implement navigation to version information page
+                    _showVersionSnackBar(context);
                   },
                 ),
                 SizedBox(height: 20),

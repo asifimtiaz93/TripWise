@@ -3,6 +3,8 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:tripwise/pages/navpages/place_detail_page.dart';
+import 'package:tripwise/pages/navpages/view_all_places.dart';
+
 
 class homePage extends StatefulWidget {
   final User? user;
@@ -137,7 +139,15 @@ class _homePageState extends State<homePage> {
                     ),
                   ),
                   TextButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      // Navigate to the View All page
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => ViewAllPlacesPage(),
+                        ),
+                      );
+                    },
                     child: Text(
                       'View all',
                       style: TextStyle(color: Colors.red),
@@ -146,48 +156,48 @@ class _homePageState extends State<homePage> {
                 ],
               ),
               SizedBox(height: 10),
-              SizedBox(
-                height: 250,
-                child: StreamBuilder<QuerySnapshot>(
-                  stream: FirebaseFirestore.instance.collection('PopularPlace').snapshots(),
-                  builder: (context, snapshot) {
-                    if (snapshot.connectionState == ConnectionState.waiting) {
-                      return Center(child: CircularProgressIndicator());
-                    }
+              StreamBuilder<QuerySnapshot>(
+                stream: FirebaseFirestore.instance.collection('PopularPlace').snapshots(),
+                builder: (context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return Center(child: CircularProgressIndicator());
+                  }
 
-                    if (snapshot.hasError) {
-                      print('Error: ${snapshot.error}');
-                      return Center(child: Text('Error: ${snapshot.error}'));
-                    }
+                  if (snapshot.hasError) {
+                    print('Error: ${snapshot.error}');
+                    return Center(child: Text('Error: ${snapshot.error}'));
+                  }
 
-                    if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
-                      print('No popular places found.');
-                      return Center(child: Text('No popular places found.'));
-                    }
+                  if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
+                    print('No popular places found.');
+                    return Center(child: Text('No popular places found.'));
+                  }
 
-                    print("Total popular places found: ${snapshot.data!.docs.length}");
+                  var places = snapshot.data!.docs.take(6).toList(); // Limit to 6 places
+                  print("Total popular places shown: ${places.length}");
 
-                    return ListView(
-                      scrollDirection: Axis.horizontal,
-                      children: snapshot.data!.docs.map((doc) {
-                        Map<String, dynamic> data = doc.data() as Map<String, dynamic>;
-                        if (data.isEmpty) {
-                          print("Empty data for doc: ${doc.id}");
-                          return SizedBox.shrink();
-                        }
-                        print("Popular Place data: $data");
-                        return _buildPopularPlaceCard(
-                          context,
-                          placeId: doc.id,
-                          image: data['ImageURL'],
-                          title: data['Name'],
-                          location: data['Location'],
-                          rating: double.tryParse(data['Ratings'].toString()) ?? 0.0,
-                        );
-                      }).toList(),
-                    );
-                  },
-                ),
+                  return GridView.builder(
+                    shrinkWrap: true,
+                    physics: NeverScrollableScrollPhysics(), // Disable scrolling for the grid
+                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: 2, // 2 items per row
+                      crossAxisSpacing: 10,
+                      mainAxisSpacing: 10,
+                    ),
+                    itemCount: places.length,
+                    itemBuilder: (context, index) {
+                      var data = places[index].data() as Map<String, dynamic>;
+                      return _buildPopularPlaceCard(
+                        context,
+                        placeId: places[index].id,
+                        image: data['ImageURL'],
+                        title: data['Name'],
+                        location: data['Location'],
+                        rating: double.tryParse(data['Ratings'].toString()) ?? 0.0,
+                      );
+                    },
+                  );
+                },
               ),
             ],
           ),
@@ -213,8 +223,6 @@ class _homePageState extends State<homePage> {
         );
       },
       child: Container(
-        width: 200,
-        margin: EdgeInsets.only(right: 16),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(16),
           image: DecorationImage(

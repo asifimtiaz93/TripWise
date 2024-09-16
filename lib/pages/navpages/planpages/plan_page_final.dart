@@ -30,7 +30,7 @@ class _PlanReadyPageState extends State<PlanReadyPage> {
   List<Map<String, dynamic>> options = [];
   Map<String, dynamic>? selectedPlace;
   bool isSaving = false;
-  int _currentIndex = 0; // for bottom navigation
+  int _currentIndex = 0;
 
   @override
   void initState() {
@@ -52,7 +52,26 @@ class _PlanReadyPageState extends State<PlanReadyPage> {
             placeData['Attributes']['AdventureSports'] == true) {
           matchedAttributes.add('Adventure Sports');
         }
-        // Add similar conditions for other activities...
+        if (widget.selectedActivities.contains('Beach Relaxation') &&
+            placeData['Attributes']['Beaches'] == true) {
+          matchedAttributes.add('Beach Relaxation');
+        }
+        if (widget.selectedActivities.contains('City Exploration') &&
+            placeData['Attributes']['Cities'] == true) {
+          matchedAttributes.add('City Exploration');
+        }
+        if (widget.selectedActivities.contains('Cultural Experiences') &&
+            placeData['Attributes']['CulturalSites'] == true) {
+          matchedAttributes.add('Cultural Experiences');
+        }
+        if (widget.selectedActivities.contains('Historical Landmarks') &&
+            placeData['Attributes']['HistoricalPlaces'] == true) {
+          matchedAttributes.add('Historical Landmarks');
+        }
+        if (widget.selectedActivities.contains('Mountain Hikes') &&
+            placeData['Attributes']['Mountains'] == true) {
+          matchedAttributes.add('Mountain Hikes');
+        }
 
         if (matchedAttributes.isNotEmpty) {
           matchedPlaces.add({
@@ -127,7 +146,6 @@ class _PlanReadyPageState extends State<PlanReadyPage> {
       _currentIndex = index;
     });
 
-    // Navigate to the corresponding page
     switch (index) {
       case 0:
         Navigator.push(
@@ -156,7 +174,7 @@ class _PlanReadyPageState extends State<PlanReadyPage> {
       MaterialPageRoute(
         builder: (context) => MainPage(initialIndex: 0, user: FirebaseAuth.instance.currentUser),
       ),
-          (route) => false, // Removes all previous routes
+          (route) => false,
     );
   }
 
@@ -165,23 +183,27 @@ class _PlanReadyPageState extends State<PlanReadyPage> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Plan Details'),
+        backgroundColor: Colors.white,
+        foregroundColor: Colors.black,
+        elevation: 1,
       ),
       body: SingleChildScrollView(
         child: Padding(
-          padding: const EdgeInsets.all(16.0),
+          padding: const EdgeInsets.all(20.0),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const Center(
+              Center(
                 child: Text(
                   'Your Plan is Ready!',
                   style: TextStyle(
-                    fontSize: 24,
+                    fontSize: 26,
                     fontWeight: FontWeight.bold,
+                    color: Colors.black87,
                   ),
                 ),
               ),
-              const SizedBox(height: 16),
+              SizedBox(height: 16),
               if (options.isNotEmpty)
                 SingleChildScrollView(
                   scrollDirection: Axis.horizontal,
@@ -196,89 +218,112 @@ class _PlanReadyPageState extends State<PlanReadyPage> {
                   ),
                 )
               else
-                const Center(
+                Center(
                   child: Text(
                     'No matches found for your selected activities.',
                     style: TextStyle(fontSize: 16, color: Colors.red),
                   ),
                 ),
-              const SizedBox(height: 16),
+              SizedBox(height: 16),
               if (selectedPlace != null)
                 _buildPlaceDetails(selectedPlace!['place']),
-              const SizedBox(height: 16),
+              SizedBox(height: 16),
               Center(
                 child: ElevatedButton(
                   onPressed: isSaving ? null : _savePlan,
                   child: isSaving
                       ? CircularProgressIndicator()
                       : Text('Save This Plan'),
+                  style: ElevatedButton.styleFrom(
+                    padding: EdgeInsets.symmetric(horizontal: 40, vertical: 15), backgroundColor: Colors.lightBlueAccent,
+                    textStyle: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                  ),
                 ),
               ),
-              const SizedBox(height: 16),
+              SizedBox(height: 16),
               Center(
                 child: ElevatedButton(
-                  onPressed: _navigateToHome, // Navigate to Home on button press
+                  onPressed: _navigateToHome,
                   child: Text('Back to Home'),
+                  style: ElevatedButton.styleFrom(
+                    padding: EdgeInsets.symmetric(horizontal: 40, vertical: 15), backgroundColor: Colors.white,
+                    textStyle: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                  ),
                 ),
               ),
             ],
           ),
         ),
       ),
-      bottomNavigationBar: BottomNavigationBar(
-        currentIndex: _currentIndex,
-        onTap: _onNavBarTapped,
-        items: [
-          BottomNavigationBarItem(
-            icon: Icon(Icons.home),
-            label: 'Home',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.map),
-            label: 'Plan',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.person),
-            label: 'Profile',
-          ),
-        ],
-      ),
+
     );
   }
 
   Widget _buildOptionButton(String text, Map<String, dynamic> placeData) {
     bool isSelected = selectedPlace != null && selectedPlace!['place']['Name'] == placeData['Name'];
 
-    return OutlinedButton(
-      onPressed: () {
-        setState(() {
-          selectedPlace = {'place': placeData};
-        });
-      },
-      style: OutlinedButton.styleFrom(
-        backgroundColor: isSelected ? Colors.blue : Colors.transparent,
-        foregroundColor: isSelected ? Colors.white : Colors.black,
-        padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 24),
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(20),
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 8.0),
+      child: OutlinedButton(
+        onPressed: () {
+          setState(() {
+            selectedPlace = {'place': placeData};
+          });
+        },
+        style: OutlinedButton.styleFrom(
+          backgroundColor: isSelected ? Colors.blueAccent : Colors.white,
+          foregroundColor: isSelected ? Colors.white : Colors.black,
+          padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 20),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(12),
+            side: BorderSide(color: Colors.blueAccent),
+          ),
         ),
+        child: Text(text, style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500)),
       ),
-      child: Text(text),
     );
   }
 
   Widget _buildPlaceDetails(Map<String, dynamic> placeData) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Image.network(placeData['ImageURL']),
-        const SizedBox(height: 8),
-        Text(placeData['Description']),
-        const SizedBox(height: 8),
-        Text('Location: ${placeData['Location']}'),
-        const SizedBox(height: 8),
-        Text('Rating: ${placeData['Ratings']}'),
-      ],
+    return Container(
+      decoration: BoxDecoration(
+        color: Colors.grey[100],
+        borderRadius: BorderRadius.circular(12),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.grey.withOpacity(0.2),
+            blurRadius: 8,
+            spreadRadius: 2,
+          ),
+        ],
+      ),
+      padding: EdgeInsets.all(16),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Image.network(placeData['ImageURL']),
+          SizedBox(height: 8),
+          Text(
+            placeData['Name'],
+            style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+          ),
+          SizedBox(height: 8),
+          Text(
+            placeData['Description'],
+            style: TextStyle(fontSize: 16, color: Colors.black87),
+          ),
+          SizedBox(height: 8),
+          Text('Location: ${placeData['Location']}'),
+          SizedBox(height: 8),
+          Text('Rating: ${placeData['Ratings']}'),
+        ],
+      ),
     );
   }
 }
