@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:tripwise/pages/navpages/home_page.dart';
@@ -19,6 +20,7 @@ import 'booking_history.dart';
 class MainPage extends StatefulWidget {
   final int initialIndex;
   final User? user;
+
   const MainPage({Key? key, this.initialIndex = 0, this.user}) : super(key: key);
 
   @override
@@ -27,7 +29,7 @@ class MainPage extends StatefulWidget {
 
 class _MainPageState extends State<MainPage> {
   late int selectedIndex;
-
+  bool isAdmin = false; // To track if the user is admin based on name
   final Set<String> selectedPlaces = {};
   String relationshipStatus = '';
 
@@ -35,7 +37,50 @@ class _MainPageState extends State<MainPage> {
   void initState() {
     super.initState();
     selectedIndex = widget.initialIndex;
+    _checkIfAdmin(); // Check if the user is "admin"
   }
+
+  Future<void> _checkIfAdmin() async {
+    if (widget.user != null) {
+      // Check displayName in FirebaseAuth
+      print("Checking displayName in FirebaseAuth...");
+      print("User displayName: ${widget.user!.displayName}");
+
+      if (widget.user!.displayName == "admin") {
+        print("User is admin (displayName match)");
+        setState(() {
+          isAdmin = true;
+        });
+      } else {
+        // Fetch the name from Firestore
+        print("Checking Firestore for user data...");
+        DocumentSnapshot userDoc = await FirebaseFirestore.instance
+            .collection('User')
+            .doc(widget.user!.uid)
+            .get();
+
+        if (userDoc.exists) {
+          Map<String, dynamic>? userData = userDoc.data() as Map<String, dynamic>?;
+          print("Firestore user data: $userData");
+
+          // Trim whitespace before comparing
+          if (userData != null && userData['Name'].trim() == "admin") {
+            print("User is admin (Firestore match)");
+            setState(() {
+              isAdmin = true; // Set admin flag to true if the name is "admin"
+            });
+          } else {
+            print("User is not admin (Firestore data does not match)");
+          }
+        } else {
+          print("No user data found in Firestore.");
+        }
+      }
+    } else {
+      print("No user is logged in.");
+    }
+  }
+
 
   late List<Widget> pages = [
     homePage(user: widget.user),
@@ -46,7 +91,7 @@ class _MainPageState extends State<MainPage> {
     PopularPlacesPage(),
     BookingPage(),
     SignInPage(),
-    AdminPage(),
+    AdminPage(), // Admin page (conditionally shown)
     OnboardInfoFillup1(),
     SettingsPage(),
     OnboardInfoFillup2(selectedPlaces: selectedPlaces),
@@ -156,11 +201,12 @@ class _MainPageState extends State<MainPage> {
               title: Text('Sign In'),
               onTap: () => onDrawerTapped(7),
             ),
-            ListTile(
-              leading: Icon(Icons.admin_panel_settings_sharp),
-              title: Text('Admin'),
-              onTap: () => onDrawerTapped(8),
-            ),
+            if (isAdmin) // Show Admin option if the user is "admin"
+              ListTile(
+                leading: Icon(Icons.admin_panel_settings_sharp),
+                title: Text('Admin'),
+                onTap: () => onDrawerTapped(8),
+              ),
             ListTile(
               leading: Icon(Icons.admin_panel_settings_sharp),
               title: Text('Booking History'),
